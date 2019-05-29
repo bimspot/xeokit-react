@@ -1,3 +1,36 @@
+# Xeokit-SDK integration into React
+
+This attempt to integrate the [xeokit-sdk](https://github.com/xeokit/xeokit-sdk)'s GLTF viewer into a React application aims to largely satisfy the following requirements:
+
+- specify the dimensions of the viewer
+- add more than one viewer
+- load multiple models into one viewer
+
+The GLTFViewer component receives the following props:
+
+- canvasID (string)
+- width (of the canvas) (integer)
+- height (of the canvas) (integer)
+- an array of model objects (see the models file for reference) to load into the current viewer/canvas
+
+It returns a canvas element with the specified options (id, size, models to render).
+
+Note: *I wrapped the GLTFViewer with a presentational component (CanvasCard) but that's just for demonstration purposes.*
+
+The GLTFViewer component handles the main business and rendering logic (eg. setting up the canvas, creating the viewer, loading the components, etc).
+
+A couple of example models have been included with this demo. Please refer to the CRA docs below to run and/or install this application locally.
+
+### Closing thoughts:
+**This demo app largely satisfies the requirements set forth at the beginning of this README file.** One can add one or multiple viewers by simply adding the GLTFViewer component (or the presentational component it's wrapped in, as desired). By passing the appropriate props to it, one can easily customize its size and contents (=model(s) to load). See the App.js file for a few examples.
+
+Some things to consider and watch out for that are currently beyond the scope of this demo:
+
+- Proper canvas sizing that takes into account, among other things, responsive design, aspect ratios, container sizes, etc might prove to be a bit tricky. Some reading material on the subject for the future: https://webglfundamentals.org/webgl/lessons/webgl-anti-patterns.html
+
+___
+
+## Standard CRA docs below:
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts

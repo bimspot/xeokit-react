@@ -1,6 +1,7 @@
 import React from "react";
 import { sampleModel1, sampleModel2, sampleModel3 } from "./models";
 import CanvasCard from "./CanvasCard";
+import GLTFViewer from "./GLTFViewer";
 
 const App = () => (
     <div className="container my-5">
@@ -19,6 +20,14 @@ const App = () => (
             height={800}
             models={[sampleModel1, sampleModel3]}
         />
+        <div className="m-5">
+            <GLTFViewer
+                canvasID="canvas-3"
+                width={200}
+                height={200}
+                models={[sampleModel1]}
+            />
+        </div>
     </div>
 );
 
