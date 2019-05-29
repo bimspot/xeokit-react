@@ -30,6 +30,7 @@ class GLTFViewer extends Component {
                 id={this.props.canvasID}
                 width={this.props.width}
                 height={this.props.height}
+                className="d-block mx-auto border border-secondary m-3 mw-100"
             />
         );
     }

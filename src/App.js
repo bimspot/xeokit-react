@@ -1,20 +1,23 @@
 import React from "react";
 import { sampleModel1, sampleModel2, sampleModel3 } from "./models";
-import GLTFViewer from "./GLTFViewer";
+import CanvasCard from "./CanvasCard";
 
 const App = () => (
-    <div>
-        <GLTFViewer
+    <div className="container my-5">
+        <h1 className="text-center text-light">
+            Xeokit-SDK React integration demo
+        </h1>
+        <CanvasCard
             canvasID="canvas-1"
-            width={200}
-            height={200}
-            models={[sampleModel1]}
+            width={600}
+            height={600}
+            models={[sampleModel2]}
         />
-        <GLTFViewer
+        <CanvasCard
             canvasID="canvas-2"
             width={1200}
-            height={500}
-            models={[sampleModel2, sampleModel3]}
+            height={800}
+            models={[sampleModel1, sampleModel3]}
         />
     </div>
 );
