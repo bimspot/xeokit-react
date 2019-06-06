@@ -18,6 +18,19 @@ class GLTFViewer extends Component {
             canvasId: this.props.canvasID
         });
 
+        // Set the camera props if any have been passed through props
+        if (this.props.camera) {
+            console.log("We have some camera angles!");
+
+            const camera = viewer.scene.camera;
+            const { eye, look, up, zoom } = this.props.camera;
+
+            camera.eye = eye;
+            camera.look = look;
+            camera.up = up;
+            camera.zoom(zoom);
+        }
+
         const gltfLoader = new GLTFLoaderPlugin(viewer);
 
         const models = this.props.models.map(model => gltfLoader.load(model));

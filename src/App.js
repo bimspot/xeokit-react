@@ -3,6 +3,13 @@ import { sampleModel1, sampleModel2, sampleModel3 } from "./models";
 import CanvasCard from "./CanvasCard";
 import GLTFViewer from "./GLTFViewer";
 
+const sampleCameraProps = {
+    eye: [-10, 0, 0],
+    look: [-1, 0, 0],
+    up: [0, 1, 0],
+    zoom: -10
+};
+
 const App = () => (
     <div className="container my-5">
         <h1 className="text-center text-light">
@@ -23,9 +30,10 @@ const App = () => (
         <div className="m-5">
             <GLTFViewer
                 canvasID="canvas-3"
-                width={200}
-                height={200}
+                width={600}
+                height={600}
                 models={[sampleModel1]}
+                camera={sampleCameraProps}
             />
         </div>
     </div>
