@@ -6,6 +6,7 @@
     "react-scripts": "3.0.1"
   },
   "dependencies": {
+    "lodash.difference": "^4.5.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "xeokit-sdk": "github:barnabasmolnar/xeokit-sdk"

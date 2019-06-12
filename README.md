@@ -29,8 +29,15 @@ Some things to consider and watch out for that are currently beyond the scope of
 - Proper canvas sizing that takes into account, among other things, responsive design, aspect ratios, container sizes, etc might prove to be a bit tricky. Some reading material on the subject for the future: https://webglfundamentals.org/webgl/lessons/webgl-anti-patterns.html
 
 
-### Development notes, todos:
+### Development notes:
 - Basic camera control and zooming have been added, these can be passed as props to the viewer component now. For now, the ```eye```, ```look```, ```up``` and ```zoom``` camera properties have been added but it should be relatively easy to extend this with others if required. One open question is whether all camera properties are supposed to be passed through or can we be selective about this? That is, can I pass one component only the ```zoom``` value and another one the whole package?
+
+### TODOS:
+- [ ] create individual demo components to keep App.js clean
+- [ ] update readme as the individual features are incorporated into master
+- [ ] clean up readme/comments/code (console.logs, etc)
+- [ ] conditional loading/instantiating (only use what we've passed through props, etc)
+- [ ] proper organisation (files, folders, utilities, etc)
 ___
 
 ## Standard CRA docs below:
