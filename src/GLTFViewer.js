@@ -8,16 +8,10 @@ import difference from "lodash/difference";
 class GLTFViewer extends Component {
     componentDidMount() {
         // Get the necessary props with some nice destructuring
-        const {
-            canvasID,
-            models,
-            camera,
-            bcfViewpoints,
-            eventToPickOn
-        } = this.props;
+        const { camera, bcfViewpoints } = this.props;
 
         // First, we instantiate the viewer with the canvasID
-        this.setUpViewer(canvasID);
+        this.setUpViewer();
 
         // If there's any camera settings passed through props
         // let's apply them here
@@ -27,14 +21,14 @@ class GLTFViewer extends Component {
         this.loadPlugins();
 
         // Then we load the model(s)
-        const modelsToShow = this.loadModels(models);
+        const modelsToShow = this.loadModels();
 
         // Set the bcfViewpoints if there's any
-        if (bcfViewpoints) this.setBCFViewpoints(bcfViewpoints, modelsToShow);
+        if (bcfViewpoints) this.setBCFViewpoints(modelsToShow);
 
         // The picker function is called on the scene with
         // the desired event type (e.g. mouseclicked, mousemove, etc)
-        this.pickEntity(eventToPickOn);
+        this.pickEntity();
     }
 
     // Whenever the props change, this method will run
@@ -62,9 +56,9 @@ class GLTFViewer extends Component {
 
     // Instantiate the viewer and store it on the component
     // instance so that any of our methods can have access to it
-    setUpViewer(canvasID) {
+    setUpViewer() {
         this.viewer = new Viewer({
-            canvasId: canvasID
+            canvasId: this.props.canvasID
         });
     }
 
@@ -86,8 +80,8 @@ class GLTFViewer extends Component {
         }
     }
 
-    loadModels(models) {
-        return models.map(model => this.gltfLoader.load(model));
+    loadModels() {
+        return this.props.models.map(model => this.gltfLoader.load(model));
     }
 
     setCamera() {
@@ -102,9 +96,9 @@ class GLTFViewer extends Component {
         camera.zoom(zoom);
     }
 
-    setBCFViewpoints(viewpoints, models) {
+    setBCFViewpoints(models) {
         models.forEach((model, idx) => {
-            const viewpoint = viewpoints[idx];
+            const viewpoint = this.props.bcfViewpoints[idx];
             // Try and set viewpoint only if one exists at all
             // for the corresponding element
             if (viewpoint) {
@@ -120,7 +114,8 @@ class GLTFViewer extends Component {
     // Log picked entity's id to the console
     // the click event will be the default if there's nothing
     // else explicitly passed through
-    pickEntity(eventToPickOn = "mouseclicked") {
+    pickEntity() {
+        const eventToPickOn = this.props.eventToPickOn || "mouseclicked";
         let lastEntity = null;
         let lastColorize = null;
 
