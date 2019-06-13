@@ -7,7 +7,13 @@ import difference from "lodash/difference";
 class GLTFViewer extends Component {
     componentDidMount() {
         // Get the necessary props with some nice destructuring
-        const { canvasID, models, camera, bcfViewpoints } = this.props;
+        const {
+            canvasID,
+            models,
+            camera,
+            bcfViewpoints,
+            eventToPickOn
+        } = this.props;
 
         // First, we instantiate the viewer with the canvasID
         this.setUpViewer(canvasID);
@@ -24,6 +30,10 @@ class GLTFViewer extends Component {
 
         // Set the bcfViewpoints if there's any
         if (bcfViewpoints) this.setBCFViewpoints(bcfViewpoints, modelsToShow);
+
+        // The picker function is called on the scene with
+        // the desired event type (e.g. mouseclicked, mousemove, etc)
+        this.pickEntity(eventToPickOn);
     }
 
     // Whenever the props change, this method will run
@@ -94,6 +104,41 @@ class GLTFViewer extends Component {
                 model.on("loaded", () =>
                     this.BCFViewpointsPlugin.setViewpoint(viewpoint)
                 );
+            }
+        });
+    }
+
+    // Attempt to pick an entity
+    // Highlight each entity successfully picked
+    // Log picked entity's id to the console
+    // the click event will be the default if there's nothing
+    // else explicitly passed through
+    pickEntity(eventToPickOn = "mouseclicked") {
+        let lastEntity = null;
+        let lastColorize = null;
+
+        const scene = this.viewer.scene;
+
+        scene.input.on(eventToPickOn, coords => {
+            const hit = scene.pick({
+                canvasPos: coords
+            });
+
+            if (hit) {
+                console.log(hit.entity.id);
+                if (!lastEntity || hit.entity.id !== lastEntity.id) {
+                    if (lastEntity) {
+                        lastEntity.colorize = lastColorize;
+                    }
+                    lastEntity = hit.entity;
+                    lastColorize = hit.entity.colorize.slice();
+                    hit.entity.colorize = [0.0, 1.0, 0.0];
+                }
+            } else {
+                if (lastEntity) {
+                    lastEntity.colorize = lastColorize;
+                    lastEntity = null;
+                }
             }
         });
     }
