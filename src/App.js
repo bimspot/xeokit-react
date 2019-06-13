@@ -3,6 +3,7 @@ import ChangeModels from "./component-demos/ChangeModels";
 import BCFViewpoint from "./component-demos/BCFViewpoint";
 import Highlighting from "./component-demos/Highlighting";
 import NavCube from "./component-demos/NavCube";
+import Screenshot from "./component-demos/Screenshot";
 
 const App = () => (
     <div className="container my-5">
@@ -35,6 +36,13 @@ const App = () => (
             <div className="card-body">
                 <h4 className="card-title mb-5">Camera control with NavCube</h4>
                 <NavCube />
+            </div>
+        </div>
+        <div className="card bg-light my-5">
+            <div className="card-header">Feature</div>
+            <div className="card-body">
+                <h4 className="card-title mb-5">Take screenshot of scene</h4>
+                <Screenshot />
             </div>
         </div>
     </div>
