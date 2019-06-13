@@ -50,7 +50,7 @@ class ChangeModels extends Component {
                 </div>
                 <div className="my-5">
                     <GLTFViewer
-                        canvasID="canvas-3"
+                        canvasID="canvas-1"
                         width={600}
                         height={600}
                         models={this.state.modelsToLoad}

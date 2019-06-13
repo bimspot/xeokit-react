@@ -1,12 +1,13 @@
 import React, { Component } from "react";
 import { Viewer } from "xeokit-sdk/src/viewer/Viewer";
 import { GLTFLoaderPlugin } from "xeokit-sdk/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin";
+import { BCFViewpointsPlugin } from "xeokit-sdk/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin";
 import difference from "lodash/difference";
 
 class GLTFViewer extends Component {
     componentDidMount() {
         // Get the necessary props with some nice destructuring
-        const { canvasID, models, camera } = this.props;
+        const { canvasID, models, camera, bcfViewpoints } = this.props;
 
         // First, we instantiate the viewer with the canvasID
         this.setUpViewer(canvasID);
@@ -16,10 +17,13 @@ class GLTFViewer extends Component {
         if (camera) this.setCamera();
 
         // Then we load the necessary plugins
-        this.loadPlugins(models);
+        this.loadPlugins();
 
         // Then we load the model(s)
-        this.loadModels(models);
+        const modelsToShow = this.loadModels(models);
+
+        // Set the bcfViewpoints if there's any
+        if (bcfViewpoints) this.setBCFViewpoints(bcfViewpoints, modelsToShow);
     }
 
     // Whenever the props change, this method will run
@@ -57,6 +61,12 @@ class GLTFViewer extends Component {
     // same reason we did with the viewer
     loadPlugins() {
         this.gltfLoader = new GLTFLoaderPlugin(this.viewer);
+
+        // Only instantiate the BCFViewpointsPlugin if there are any
+        // bcfViewpoints passed through props
+        if (this.props.bcfViewpoints) {
+            this.BCFViewpointsPlugin = new BCFViewpointsPlugin(this.viewer);
+        }
     }
 
     loadModels(models) {
@@ -73,6 +83,19 @@ class GLTFViewer extends Component {
         camera.look = look;
         camera.up = up;
         camera.zoom(zoom);
+    }
+
+    setBCFViewpoints(viewpoints, models) {
+        models.forEach((model, idx) => {
+            const viewpoint = viewpoints[idx];
+            // Try and set viewpoint only if one exists at all
+            // for the corresponding element
+            if (viewpoint) {
+                model.on("loaded", () =>
+                    this.BCFViewpointsPlugin.setViewpoint(viewpoint)
+                );
+            }
+        });
     }
 
     render() {
