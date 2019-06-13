@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Viewer } from "xeokit-sdk/src/viewer/Viewer";
 import { GLTFLoaderPlugin } from "xeokit-sdk/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin";
 import { BCFViewpointsPlugin } from "xeokit-sdk/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin";
+import { NavCubePlugin } from "xeokit-sdk/src/plugins/NavCubePlugin/NavCubePlugin";
 import difference from "lodash/difference";
 
 class GLTFViewer extends Component {
@@ -77,6 +78,12 @@ class GLTFViewer extends Component {
         if (this.props.bcfViewpoints) {
             this.BCFViewpointsPlugin = new BCFViewpointsPlugin(this.viewer);
         }
+
+        // Only instantiate the NavCubePlugin if there are any
+        // navcube settings passed through props
+        if (this.props.navCubeSettings) {
+            new NavCubePlugin(this.viewer, this.props.navCubeSettings);
+        }
     }
 
     loadModels(models) {
@@ -145,12 +152,22 @@ class GLTFViewer extends Component {
 
     render() {
         return (
-            <canvas
-                id={this.props.canvasID}
-                width={this.props.width}
-                height={this.props.height}
-                className="d-block mx-auto border border-secondary m-3 mw-100"
-            />
+            <div>
+                <canvas
+                    id={this.props.canvasID}
+                    width={this.props.width}
+                    height={this.props.height}
+                    className="d-block mx-auto border border-secondary m-3 mw-100"
+                />
+                {this.props.navCubeSettings ? (
+                    <canvas
+                        id={this.props.navCubeSettings.canvasId}
+                        width={this.props.navCubeSettings.canvasWidth}
+                        height={this.props.navCubeSettings.canvasHeight}
+                        className="d-block mx-auto mw-100"
+                    />
+                ) : null}
+            </div>
         );
     }
 }
