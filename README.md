@@ -1,46 +1,70 @@
-# Xeokit-SDK integration into React
+# xeokit-sdk React integration
 
-This attempt to integrate the [xeokit-sdk](https://github.com/xeokit/xeokit-sdk)'s GLTF viewer into a React application aims to largely satisfy the following requirements:
+This attempt to integrate the [xeokit-sdk](https://github.com/xeokit/xeokit-sdk)'s GLTF viewer into a React application aims to largely satisfy/provide the following requirements/features:
 
-- specify the dimensions of the viewer
-- add more than one viewer
-- load multiple models into one viewer
+- specify the dimensions of the viewer/canvas
+- render one or multiple viewer components
+- load scene with predefined camera settings
+- load one or multiple models into one scene
+- provide convenient camera presets/controls
+- dynamically add/remove models to/from a scene
+- load BCF viewpoint associated with model
+- highlight/pick entities
+- take screenshots of scene
 
-The GLTFViewer component receives the following props:
+At a minimum, the `GLTFViewer` component expects a `canvasID` prop (of *string* type). An HMTL canvas element will be created and for the viewer to work, it needs an ID. If multiple `GLTFViewer`s are desired, then each `canvasID` neeeds to be **unique**.
 
-- canvasID (string)
-- width (of the canvas) (integer)
-- height (of the canvas) (integer)
-- an array of model objects (see the models file for reference) to load into the current viewer/canvas
+The canvas dimensions can optionally be controlled by the `width` and `height` props, both of which expect integers.
 
-It returns a canvas element with the specified options (id, size, models to render).
+The optional `camera` prop can be passed through to load the scene with predefined camera settings. It expects an object and can set the camera's `eye`, `look`, `up` and `zoom` properties. A sample camera object may look like this:
 
-Note: *I wrapped the GLTFViewer with a presentational component (CanvasCard) but that's just for demonstration purposes.*
+```js
+{
+  eye: [-10, 0, 0],
+  look: [-1, 0, 0],
+  up: [0, 1, 0],
+  zoom: -10
+}
+```
 
-The GLTFViewer component handles the main business and rendering logic (eg. setting up the canvas, creating the viewer, loading the components, etc).
+The `models` prop is also one that one will probably want to pass through. It expects an *array* of model objects. Please see the `models.js` file for a couple of examples. An empty array can also be given here if models are to be added dynamically from a UI interface or possibly fetched from a network resource. See the `ChangeModels.js` file for an example in the `component-demos` folder.
 
-A couple of example models have been included with this demo. Please refer to the CRA docs below to run and/or install this application locally.
+The `bcfViewpoints` is an optional prop that expects an *array* and can be supplied if a model needs to be loaded with a corresponding BCF Viewpoint. See the `bcf_viewpoints.json` file for an example of the viewpoint file's structure. In the current implementation, `models` and `bcfViewpoints` are two separate props and viewpoints are paired/matched with respective models based on array indices. This implementation might, however, change in the future. See [this issue](https://github.com/bimspot/xeokit-react-demo/issues/3) for details.
 
-### Closing thoughts:
-**This demo app largely satisfies the requirements set forth at the beginning of this README file.** One can add one or multiple viewers by simply adding the GLTFViewer component (or the presentational component it's wrapped in, as desired). By passing the appropriate props to it, one can easily customize its size and contents (=model(s) to load). See the App.js file for a few examples.
+Highlighting/picking entities in a scene is enabled by default and cannot be opted out of. Should this later be a requirement/request, it certainly seems possible to change this behaviour. Picking happens on a mouse click event by default but this can be overridden by supplying the `eventToPickOn` prop that expects a *string* with the desired event name. Possible event types are not yet fully documented but should later be available in full. Follow [this issue](https://github.com/xeokit/xeokit-sdk/issues/87) on the xeokit-sdk repo to get updates.
 
-Some things to consider and watch out for that are currently beyond the scope of this demo:
+The [NavCube plugin](https://xeokit.github.io/xeokit-sdk/examples/#gizmos_NavCubePlugin) can optionally be enabled to provide convenient camera controls. The optional `navCubeSettings` prop expects an object with the navcube configs. Please see the `navcube_settings.js` file for an example.
+
+A `Take Screenshot` button can optionally be rendered with the viewer if the `enableScreenshot` prop is supplied with a *truthy* value.
+
+---
+
+Some things to consider and watch out for that have yet to be tackled:
 
 - Proper canvas sizing that takes into account, among other things, responsive design, aspect ratios, container sizes, etc might prove to be a bit tricky. Some reading material on the subject for the future: https://webglfundamentals.org/webgl/lessons/webgl-anti-patterns.html
 
-
-### Development notes:
-- Basic camera control and zooming have been added, these can be passed as props to the viewer component now. For now, the ```eye```, ```look```, ```up``` and ```zoom``` camera properties have been added but it should be relatively easy to extend this with others if required. One open question is whether all camera properties are supposed to be passed through or can we be selective about this? That is, can I pass one component only the ```zoom``` value and another one the whole package?
+---
 
 ### TODOS:
-- [ ] create individual demo components to keep App.js clean
-- [ ] update readme as the individual features are incorporated into master
-- [ ] clean up readme/comments/code (console.logs, etc)
-- [ ] conditional loading/instantiating (only use what we've passed through props, etc)
 - [ ] proper organisation (files, folders, utilities, etc)
-___
+- [ ] add prop-types
+- [ ] administrative stuff (add/edit license, description, package.json, etc)
+
+### DONE:
+- [x] create individual demo components to keep App.js clean
+- [x] update readme as the individual features are incorporated into master
+- [x] clean up readme/comments/code (console.logs, etc)
+- [x] conditional loading/instantiating (only use what we've passed through props, etc)
+
+---
+
+Further todos, feature additions, enchancements requests and bugs will likely be indicated and tracked on the issues page from now on.
+
+---
+
 
 ## Standard CRA docs below:
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
