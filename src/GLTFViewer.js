@@ -8,7 +8,7 @@ import difference from "lodash/difference";
 class GLTFViewer extends Component {
     componentDidMount() {
         // Get the necessary props with some nice destructuring
-        const { camera, bcfViewpoints } = this.props;
+        const { camera, bcfViewpoint } = this.props;
 
         // First, we instantiate the viewer with the canvasID
         this.setUpViewer();
@@ -21,10 +21,11 @@ class GLTFViewer extends Component {
         this.loadPlugins();
 
         // Then we load the model(s)
-        const modelsToShow = this.loadModels();
+        const perfModels = this.loadModels();
 
-        // Set the bcfViewpoints if there's any
-        if (bcfViewpoints) this.setBCFViewpoints(modelsToShow);
+        // Set the bcfViewpoint if there's any
+        console.log(bcfViewpoint);
+        if (bcfViewpoint) this.setBCFViewpoints(perfModels);
 
         // The picker function is called on the scene with
         // the desired event type (e.g. mouseclicked, mousemove, etc)
@@ -44,7 +45,9 @@ class GLTFViewer extends Component {
             const toAdd = difference(currentProps.models, prevProps.models);
             const toRemove = difference(prevProps.models, currentProps.models);
 
-            toAdd.forEach(el => this.gltfLoader.load(el));
+            const perfModels = toAdd.map(el => this.gltfLoader.load(el));
+
+            if (currentProps.bcfViewpoint) this.setBCFViewpoints(perfModels);
 
             toRemove.forEach(el => {
                 const elID = el.id;
@@ -69,7 +72,7 @@ class GLTFViewer extends Component {
 
         // Only instantiate the BCFViewpointsPlugin if there are any
         // bcfViewpoints passed through props
-        if (this.props.bcfViewpoints) {
+        if (this.props.bcfViewpoint) {
             this.BCFViewpointsPlugin = new BCFViewpointsPlugin(this.viewer);
         }
 
@@ -97,16 +100,28 @@ class GLTFViewer extends Component {
     }
 
     setBCFViewpoints(models) {
-        models.forEach((model, idx) => {
-            const viewpoint = this.props.bcfViewpoints[idx];
-            // Try and set viewpoint only if one exists at all
-            // for the corresponding element
-            if (viewpoint) {
-                model.on("loaded", () =>
-                    this.BCFViewpointsPlugin.setViewpoint(viewpoint)
-                );
-            }
-        });
+        // bcf viewpoints are only tied to models in that there might
+        // be some entities pre-selected on the model(s)
+
+        // say we have 2 models and 1 bcf viewpoint
+        // in that viewpoint is a selection array with entity IDs
+        // we have IDs from both our models
+        // for us to be able to load and render them properly, we have to
+        // make sure that both those models have loaded
+
+        // since the xeokit sdk has no convenience method that lets us
+        // perform actions when all models have been loaded into a scene
+        // we have to wrap each model loaded event with a promise
+        // on the load event we immediately call the resolve function
+        const promises = models.map(
+            model => new Promise(resolve => model.on("loaded", resolve))
+        );
+
+        // once all the models have been loaded and thus all the promises
+        // have been resolved, we can finally load our viewpoint
+        Promise.all(promises).then(() =>
+            this.BCFViewpointsPlugin.setViewpoint(this.props.bcfViewpoint)
+        );
     }
 
     // Attempt to pick an entity

@@ -14,7 +14,7 @@ const App = () => (
             <div className="card-header">Feature</div>
             <div className="card-body">
                 <h4 className="card-title mb-5">Changing models</h4>
-                <ChangeModels />
+                {/* <ChangeModels /> */}
             </div>
         </div>
         <div className="card bg-light my-5">
@@ -28,21 +28,21 @@ const App = () => (
             <div className="card-header">Feature</div>
             <div className="card-body">
                 <h4 className="card-title mb-5">Highlight/pick entities</h4>
-                <Highlighting />
+                {/* <Highlighting /> */}
             </div>
         </div>
         <div className="card bg-light my-5">
             <div className="card-header">Feature</div>
             <div className="card-body">
                 <h4 className="card-title mb-5">Camera control with NavCube</h4>
-                <NavCube />
+                {/* <NavCube /> */}
             </div>
         </div>
         <div className="card bg-light my-5">
             <div className="card-header">Feature</div>
             <div className="card-body">
                 <h4 className="card-title mb-5">Take screenshot of scene</h4>
-                <Screenshot />
+                {/* <Screenshot /> */}
             </div>
         </div>
     </div>
