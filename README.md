@@ -8,7 +8,7 @@ This attempt to integrate the [xeokit-sdk](https://github.com/xeokit/xeokit-sdk)
 - load one or multiple models into one scene
 - provide convenient camera presets/controls
 - dynamically add/remove models to/from a scene
-- load BCF viewpoint associated with model
+- load BCF viewpoint
 - highlight/pick entities
 - take screenshots of scene
 
@@ -29,7 +29,7 @@ The optional `camera` prop can be passed through to load the scene with predefin
 
 The `models` prop is also one that one will probably want to pass through. It expects an *array* of model objects. Please see the `models.js` file for a couple of examples. An empty array can also be given here if models are to be added dynamically from a UI interface or possibly fetched from a network resource. See the `ChangeModels.js` file for an example in the `component-demos` folder.
 
-The `bcfViewpoints` is an optional prop that expects an *array* and can be supplied if a model needs to be loaded with a corresponding BCF Viewpoint. See the `bcf_viewpoints.json` file for an example of the viewpoint file's structure. In the current implementation, `models` and `bcfViewpoints` are two separate props and viewpoints are paired/matched with respective models based on array indices. This implementation might, however, change in the future. See [this issue](https://github.com/bimspot/xeokit-react-demo/issues/3) for details.
+The `bcfViewpoint` is an optional prop that expects a viewpoints *object*. See the `bcf_viewpoints.json` file for an example of the viewpoint file's structure. After some experimentation, I have found that BCF viewpoints are more tied to the scene object itself rather than the models on the scene. They seem to be only connected to models in that a *selection* array of objects can be supplied to select entities on models. As a result, instead of a bcfViewpoints prop that accepts an array of viewpoints, a bcfViewpoint (singular) prop has been implemented that accepts one viewpoints obejct. See [this issue](https://github.com/bimspot/xeokit-react-demo/issues/3) for further details.
 
 Highlighting/picking entities in a scene is enabled by default and cannot be opted out of. Should this later be a requirement/request, it certainly seems possible to change this behaviour. Picking happens on a mouse click event by default but this can be overridden by supplying the `eventToPickOn` prop that expects a *string* with the desired event name. Possible event types are not yet fully documented but should later be available in full. Follow [this issue](https://github.com/xeokit/xeokit-sdk/issues/87) on the xeokit-sdk repo to get updates.
 
