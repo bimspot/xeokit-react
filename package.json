@@ -9,7 +9,7 @@
     "lodash.difference": "^4.5.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
-    "xeokit-sdk": "github:barnabasmolnar/xeokit-sdk"
+    "xeokit-sdk": "github:xeokit/xeokit-sdk"
   },
   "scripts": {
     "start": "react-scripts start",
