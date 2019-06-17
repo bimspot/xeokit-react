@@ -57,6 +57,11 @@ class GLTFViewer extends Component {
         }
     }
 
+    // Destroy/clean up viewer on component unmount
+    componentWillUnmount() {
+        this.viewer.destroy();
+    }
+
     // Instantiate the viewer and store it on the component
     // instance so that any of our methods can have access to it
     setUpViewer() {
