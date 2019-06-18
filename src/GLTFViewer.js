@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 import { Viewer } from "xeokit-sdk/src/viewer/Viewer";
 import { GLTFLoaderPlugin } from "xeokit-sdk/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin";
 import { BCFViewpointsPlugin } from "xeokit-sdk/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin";
@@ -223,5 +224,22 @@ class GLTFViewer extends Component {
         );
     }
 }
+
+GLTFViewer.propTypes = {
+    canvasID: PropTypes.string.isRequired,
+    width: PropTypes.number,
+    height: PropTypes.number,
+    camera: PropTypes.object,
+    models: PropTypes.arrayOf(
+        PropTypes.shape({
+            id: PropTypes.string.isRequired,
+            src: PropTypes.string.isRequired
+        })
+    ).isRequired,
+    bcfViewpoint: PropTypes.object,
+    eventToPickOn: PropTypes.string,
+    navCubeSettings: PropTypes.shape({ canvasId: PropTypes.string.isRequired }),
+    enableScreenshot: PropTypes.bool
+};
 
 export default GLTFViewer;
