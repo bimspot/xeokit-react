@@ -1,6 +1,6 @@
 import React from "react";
 import { sampleModel1 } from "../models";
-import GLTFViewer from "../GLTFViewer";
+import { GLTFViewer } from "xeokit-react";
 import { sampleNavCubeSettings } from "../navcube_settings";
 
 const NavCube = () => (

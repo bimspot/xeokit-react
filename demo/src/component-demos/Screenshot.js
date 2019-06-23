@@ -1,15 +1,15 @@
 import React from "react";
 import { sampleModel1 } from "../models";
-import GLTFViewer from "../GLTFViewer";
+import { GLTFViewer } from "xeokit-react";
 
-const Highlighting = () => (
+const Screenshot = () => (
     <GLTFViewer
-        canvasID="canvas-3"
+        canvasID="canvas-5"
         width={600}
         height={600}
         models={[sampleModel1]}
-        eventToPickOn={"mouseclicked"}
+        enableScreenshot={true}
     />
 );
 
-export default Highlighting;
+export default Screenshot;

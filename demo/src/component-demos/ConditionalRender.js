@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { sampleModel1 } from "../models";
-import GLTFViewer from "../GLTFViewer";
+import { GLTFViewer } from "xeokit-react";
 
 class ConditionalRender extends Component {
     constructor(props) {

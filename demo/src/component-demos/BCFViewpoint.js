@@ -1,6 +1,6 @@
 import React from "react";
 import { sampleModel3, sampleModel1 } from "../models";
-import GLTFViewer from "../GLTFViewer";
+import { GLTFViewer } from "xeokit-react";
 import bcfViewpoints from "../bcf_viewpoints.json";
 
 const BCFViewpoint = () => (

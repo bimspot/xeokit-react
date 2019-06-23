@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { sampleModel1, sampleModel2, sampleModel3 } from "../models";
-import GLTFViewer from "../GLTFViewer";
+import { GLTFViewer } from "xeokit-react";
 
 const sampleModels = [sampleModel1, sampleModel2, sampleModel3];
 const models = sampleModels.map(model => ({ ...model, isChecked: false }));
