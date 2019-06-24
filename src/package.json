@@ -16,7 +16,7 @@
     "gltf"
   ],
   "author": "",
-  "license": "ISC",
+  "license": "UNLICENSED",
   "devDependencies": {
     "@babel/core": "^7.4.5",
     "@babel/preset-env": "^7.4.5",

@@ -1,13 +1,12 @@
 # Summary
 
-## Getting Started
-
+## The basics
+* [Getting Started](GettingStarted.md)
 * [xeokit-sdk](xeokit-sdk.md)
 * [Glossary](Glossary.md)
 
 
-## Components
-
+## Features
 * [Changing Models](ChangingModels.md)
 * [Conditional Rendering](ConditionalRendering.md)
 * [Highlighting Elements](HighlightingElements.md)
