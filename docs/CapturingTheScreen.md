@@ -4,14 +4,10 @@ There are currently 2 ways to take a screenshot of a given scene.
 
 ## Option 1
 
-A `Take Screenshot` button can **optionally** be rendered with the viewer if the `enableScreenshot` prop is supplied with a _truthy_ value:
+A `Take Screenshot` button can **optionally** be rendered with the viewer if the `enableScreenshot` prop is supplied:
 
 ```js
-<GLTFViewer
-  canvasID="canvas-5"
-  models={[sampleModel1]}
-  enableScreenshot={true}
-/>
+<GLTFViewer canvasID="canvas-5" models={[sampleModel1]} enableScreenshot />
 ```
 
 With this option, a button element will be rendered for you. We currently have some standard Bootstrap 4 styles applied to the button but you may of course overwrite it with your own; the button has a `take-screenshot` id that can be used as a styling hook.
