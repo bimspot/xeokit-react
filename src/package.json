@@ -4,8 +4,9 @@
   "description": "",
   "main": "build/xeokit-react.js",
   "scripts": {
-    "dev": "webpack --watch --mode=production",
-    "build": "webpack --mode=production"
+    "lint": "./node_modules/.bin/eslint *.js",
+    "dev": "./node_modules/.binwebpack --watch --mode=production",
+    "build": "./node_modules/.binwebpack --mode=production"
   },
   "keywords": [
     "xeokit",
