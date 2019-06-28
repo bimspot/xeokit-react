@@ -4,6 +4,8 @@ node_js:
   - node
   - 'lts/*'
 
+before_script: cd src
+
 script:
   - npm run lint
   - npm run build
