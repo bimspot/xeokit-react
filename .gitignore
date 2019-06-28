@@ -27,3 +27,4 @@ demo/yarn-error.log*
 # Src package
 src/node_modules
 src/build
+src/package-lock.json

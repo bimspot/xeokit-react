@@ -1,3 +1,3 @@
-import GLTFViewer from "./GLTFViewer";
+import GLTFViewer from './GLTFViewer';
 
 export { GLTFViewer };
