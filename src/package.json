@@ -5,6 +5,7 @@
   "main": "build/xeokit-react.js",
   "scripts": {
     "lint": "./node_modules/.bin/eslint *.js",
+    "lint-fix": "./node_modules/.bin/eslint *.js --fix",
     "dev": "./node_modules/.bin/webpack --watch --mode=production",
     "build": "./node_modules/.bin/webpack --mode=production"
   },
