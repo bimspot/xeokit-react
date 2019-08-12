@@ -1,6 +1,7 @@
 {
   "extends": [
     "airbnb",
+    "airbnb/hooks",
     "prettier/react",
     "plugin:jest/recommended",
     "plugin:react/recommended"
