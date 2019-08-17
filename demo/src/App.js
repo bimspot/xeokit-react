@@ -7,6 +7,7 @@ import Screenshot from './component-demos/Screenshot';
 import ConditionalRender from './component-demos/ConditionalRender';
 import GLTFModel from './component-demos/GLTFModel';
 import XKTModel from './component-demos/XKTModel';
+import Hooks from './component-demos/Hooks';
 
 const App = () => (
   <div className="container my-5">
@@ -16,15 +17,22 @@ const App = () => (
     <div className="card bg-light my-5">
       <div className="card-header">Feature</div>
       <div className="card-body">
+        <h4 className="card-title mb-5">Hooks</h4>
+        <Hooks />
+      </div>
+    </div>
+    <div className="card bg-light my-5">
+      <div className="card-header">Feature</div>
+      <div className="card-body">
         <h4 className="card-title mb-5">GLTF Model</h4>
-        <GLTFModel />
+        {/* <GLTFModel /> */}
       </div>
     </div>
     <div className="card bg-light my-5">
       <div className="card-header">Feature</div>
       <div className="card-body">
         <h4 className="card-title mb-5">XKT Model</h4>
-        <XKTModel />
+        {/* <XKTModel /> */}
       </div>
     </div>
     <div className="card bg-light my-5">

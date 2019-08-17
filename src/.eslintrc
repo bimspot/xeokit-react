@@ -1,12 +1,11 @@
 {
   "extends": [
     "airbnb",
-    "airbnb/hooks",
     "prettier/react",
     "plugin:jest/recommended",
     "plugin:react/recommended"
   ],
-  "plugins": ["prettier", "jest"],
+  "plugins": ["prettier", "jest", "react-hooks"],
   "parserOptions": {
     "sourceType": "module",
     "ecmaFeatures": {
@@ -30,6 +29,8 @@
     "react/jsx-uses-react": "error",
     "padded-blocks": "off",
     "import/no-unresolved": "off",
-    "import/prefer-default-export": "off"
+    "import/prefer-default-export": "off",
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn"
   }
 }

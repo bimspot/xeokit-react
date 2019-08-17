@@ -26,3 +26,19 @@ export const xktModel = {
   edges: true,
   performacne: true,
 };
+
+export const hooksModel = {
+  id: 'xkt-model',
+  src: './xkt/duplex.xkt',
+  metaModelSrc: './xkt/duplex.json',
+  edges: true,
+  performacne: true,
+};
+
+export const hooksModelv2 = {
+  id: 'xkt-model-v2',
+  src: './xkt/duplex.xkt',
+  metaModelSrc: './xkt/duplex.json',
+  edges: true,
+  performacne: true,
+};
