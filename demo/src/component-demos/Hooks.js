@@ -5,11 +5,15 @@ import { XKTLoaderPlugin } from 'xeokit-sdk/src/plugins/XKTLoaderPlugin/XKTLoade
 
 const Hooks = () => {
   const [model, setModel] = useState(hooksModel);
-  const { viewerCanvasProps } = useViewer(XKTLoaderPlugin, model);
+  const { viewerCanvasProps, takeScreenshot } = useViewer(
+    XKTLoaderPlugin,
+    model,
+  );
   return (
     <div>
       <button onClick={() => setModel(hooksModelv2)}>Change model</button>
       <canvas id="hooks" {...viewerCanvasProps} />
+      <button onClick={takeScreenshot}>Take screenshot</button>
     </div>
   );
 };
