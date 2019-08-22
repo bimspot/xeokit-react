@@ -11,6 +11,7 @@ import Hooks from './component-demos/Hooks';
 import HooksWithGLTF from './component-demos/HooksWithGLTF';
 import HooksBCF from './component-demos/HooksBCF';
 import HooksPick from './component-demos/HooksPick';
+import HooksMultiple from './component-demos/HooksMultiple';
 
 const App = () => (
   <div className="container my-5">
@@ -20,7 +21,14 @@ const App = () => (
     <div className="card bg-light my-5">
       <div className="card-header">Feature</div>
       <div className="card-body">
-        <h4 className="card-title mb-5">Hooks BCF</h4>
+        <h4 className="card-title mb-5">Hooks Multiple</h4>
+        {/* <HooksMultiple /> */}
+      </div>
+    </div>
+    <div className="card bg-light my-5">
+      <div className="card-header">Feature</div>
+      <div className="card-body">
+        <h4 className="card-title mb-5">Hooks Pick</h4>
         <HooksPick />
       </div>
     </div>

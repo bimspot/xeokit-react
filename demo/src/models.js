@@ -42,3 +42,10 @@ export const hooksModelv2 = {
   edges: true,
   performacne: true,
 };
+
+export const hooksSchep = {
+  id: 'xkt-schependomlaan',
+  src: './xkt/schependomlaan.xkt',
+  edges: true,
+  performacne: true,
+};

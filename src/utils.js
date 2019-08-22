@@ -27,3 +27,19 @@ export const pickEntity = (viewer, eventToPickOn, setPickedEntityID) => {
     }
   });
 };
+
+export const setCamera = (viewer, cameraSettings) => {
+  const { camera } = viewer.scene;
+
+  const keys = Object.keys(cameraSettings);
+
+  keys.forEach((key) => {
+    const prop = camera[key];
+    const val = cameraSettings[key];
+    if (typeof prop === 'function') {
+      prop.call(camera, val);
+    } else {
+      camera[key] = val;
+    }
+  });
+};

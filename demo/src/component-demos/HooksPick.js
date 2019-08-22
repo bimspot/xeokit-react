@@ -3,10 +3,12 @@ import { useViewer } from 'xeokit-react';
 import { hooksModel } from '../models';
 import { XKTLoaderPlugin } from 'xeokit-sdk/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin';
 
+const myModels = [hooksModel];
+
 const HooksPick = () => {
   const { viewerCanvasProps, pickedEntityID } = useViewer(
     XKTLoaderPlugin,
-    hooksModel,
+    myModels,
   );
 
   useEffect(() => {
