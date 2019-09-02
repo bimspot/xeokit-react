@@ -1,25 +1,20 @@
 import React from 'react';
 import useViewer from 'xeokit-react/useViewer';
 import { sampleModel3 } from '../models';
-import { GLTFLoaderPlugin } from 'xeokit-sdk/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin';
 import bcfViewpoints from '../bcf_viewpoints.json';
 
-const sampleBcfViewpoints = [
-  bcfViewpoints[0],
-  bcfViewpoints[0],
-  bcfViewpoints[0],
-];
+const sampleBcfViewpoints = [bcfViewpoints[0], bcfViewpoints[1]];
+
+const myModels = [sampleModel3];
 
 const HooksBCF = () => {
-  const { viewerCanvasProps, setBcfViewpoint } = useViewer(
-    GLTFLoaderPlugin,
-    sampleModel3,
-    { bcfViewpoint: bcfViewpoints[0] },
-  );
+  const { viewerCanvasProps, setBcfViewpoint } = useViewer(myModels, {
+    bcfViewpoint: sampleBcfViewpoints[0],
+  });
 
   return (
     <div>
-      <canvas id="hooks-gltf" {...viewerCanvasProps} />
+      <canvas id="hooks-gltf" {...viewerCanvasProps} width="600" height="600" />
       <ul>
         {sampleBcfViewpoints.map((s, i) => (
           <li key={i} onClick={() => setBcfViewpoint(s)}>
