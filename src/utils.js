@@ -1,3 +1,6 @@
+import { GLTFLoaderPlugin } from 'xeokit-sdk/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin';
+import { XKTLoaderPlugin } from 'xeokit-sdk/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin';
+
 export const pickEntity = (viewer, eventToPickOn, setPickedEntityID) => {
   let lastEntity = null;
   let lastColorize = null;
@@ -43,3 +46,15 @@ export const setCamera = (viewer, cameraSettings) => {
     }
   });
 };
+
+const loaders = {
+  gltf: GLTFLoaderPlugin,
+  xkt: XKTLoaderPlugin,
+};
+
+const getExtension = (fileName) => {
+  const extension = fileName.match(/\.(\w+)$/);
+  return extension && extension[1].toLowerCase();
+};
+
+export const getLoaderByExtension = fileName => loaders[getExtension(fileName)];
