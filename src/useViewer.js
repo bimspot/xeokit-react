@@ -1,15 +1,14 @@
 // React related imports
 import {
-  useState, useMemo, useEffect, useRef,
+  useState, useMemo, useEffect, useRef, useCallback,
 } from 'react';
 
 // Xeokit related imports
 import { Viewer } from 'xeokit-sdk/src/viewer/Viewer';
 import { BCFViewpointsPlugin } from 'xeokit-sdk/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin';
-import { pickEntity, setCamera } from './utils';
+import { pickEntity, setCamera, getLoaderByExtension } from './utils';
 
 const useViewer = (
-  LoaderPlugin,
   models,
   { bcfViewpoint, eventToPickOn = 'mouseclicked', camera } = {},
 ) => {
@@ -24,15 +23,6 @@ const useViewer = (
 
   // ref for the Viewer that xeokit creates
   const viewerRef = useRef();
-
-  // ref for the model loader plugin
-  const modelLoaderRef = useRef();
-
-  // Performance model ref
-  const perfModelsRef = useRef();
-
-  // BCF Viewpoint Plugin ref
-  const bcfViewpointPluginRef = useRef();
 
   // Props to use with the canvas
   const viewerCanvasProps = useMemo(() => ({ ref: setViewerCanvas }), [
@@ -59,80 +49,93 @@ const useViewer = (
 
   // TODO:
   // don't reload if viewpoint hasn't changed
-  const setBcfViewpoint = (viewpoint) => {
-    if (!bcfViewpointPluginRef.current && viewerRef.current) {
-      bcfViewpointPluginRef.current = new BCFViewpointsPlugin(
-        viewerRef.current,
-      );
-    }
-    if (perfModelsRef.current && modelsHaveLoaded) {
-      bcfViewpointPluginRef.current.setViewpoint(viewpoint);
-    }
-  };
+  const setBcfViewpoint = useCallback(
+    (viewpoint) => {
+      if (viewerRef.current && modelsHaveLoaded) {
+        const plugin = viewerRef.current.plugins.BCFViewpoints
+          || new BCFViewpointsPlugin(viewerRef.current);
+
+        plugin.setViewpoint(viewpoint);
+      }
+    },
+    [modelsHaveLoaded],
+  );
 
   // TODO:
   // break up useEffect
   // handle model, etc loading individually
-  useEffect(() => {
-    if (viewerCanvas) {
-      // Initialise xeokit features
-
-      // Initialise Viewer with canvas
-      viewerRef.current = new Viewer({ canvasElement: viewerCanvas });
-
-      // Initialise loader plugin (eg. gltfLoader, xktLoader)
-      modelLoaderRef.current = new LoaderPlugin(viewerRef.current);
-
-      // Load models
-      perfModelsRef.current = models.map(model => modelLoaderRef.current.load(model));
-
-      // If models have been loaded, set the state
-      const promises = perfModelsRef.current.map(
-        model => new Promise(resolve => model.on('loaded', resolve)),
-      );
-
-      // once all the models have been loaded and thus all the promises
-      // have been resolved, we can finally load our viewpoint
-      Promise.all(promises).then(() => setModelsHaveLoaded(true));
-
-      // Pick entities
-      pickEntity(viewerRef.current, eventToPickOn, setPickedEntityID);
-    }
-    return () => {
+  useEffect(
+    () => {
       if (viewerCanvas) {
-        // Clean up stuff (destroy Viewer, etc.)
+        // Initialise xeokit features
 
-        // Destroy the viewer
-        viewerRef.current.destroy();
+        // Initialise Viewer with canvas
+        viewerRef.current = new Viewer({ canvasElement: viewerCanvas });
+
+        // Initialise loader plugin (eg. gltfLoader, xktLoader) and load models
+        const promises = models.map(
+          model => new Promise((resolve) => {
+            const LoaderPlugin = getLoaderByExtension(model.src);
+            if (!LoaderPlugin) {
+              resolve();
+              return;
+            }
+            const loader = viewerRef.current.plugins[LoaderPlugin.name]
+                || new LoaderPlugin(viewerRef.current, { id: LoaderPlugin.name });
+            const perfModel = loader.load(model);
+            perfModel.on('loaded', resolve);
+          }),
+        );
+
+        // once all the models have been loaded and thus all the promises
+        // have been resolved, we can finally load our viewpoint
+        Promise.all(promises).then(() => setModelsHaveLoaded(true));
+
+        // Pick entities
+        pickEntity(viewerRef.current, eventToPickOn, setPickedEntityID);
       }
-    };
-  }, [viewerCanvas, LoaderPlugin, models, eventToPickOn]);
+      return () => {
+        if (viewerCanvas) {
+          // Clean up stuff (destroy Viewer, etc.)
+          setModelsHaveLoaded(false);
 
-  useEffect(() => {
-    // BCF Viewpoint loading logic
-    // bcf viewpoints are only tied to models in that there might
-    // be some entities pre-selected on the model(s)
-    if (bcfViewpoint && modelsHaveLoaded) {
-      // Only instantiate the BCFViewpointsPlugin if there are any
-      // bcfViewpoints passed through props
-      bcfViewpointPluginRef.current = new BCFViewpointsPlugin(
-        viewerRef.current,
-      );
-      bcfViewpointPluginRef.current.setViewpoint(bcfViewpoint);
-    }
-  }, [bcfViewpoint, modelsHaveLoaded]);
+          // Destroy the viewer
+          viewerRef.current.destroy();
+        }
+      };
+    },
+    [viewerCanvas, models, eventToPickOn],
+  );
 
-  useEffect(() => {
-    if (viewerRef.current && camera) {
-      setCamera(viewerRef.current, camera);
-    }
-  }, [camera, viewerCanvas]);
+  useEffect(
+    () => {
+      // BCF Viewpoint loading logic
+      if (bcfViewpoint) {
+        setBcfViewpoint(bcfViewpoint);
+      }
+    },
+    [bcfViewpoint, setBcfViewpoint],
+  );
 
-  useEffect(() => {
-    if (!camera && modelsHaveLoaded) {
-      viewerRef.current.cameraFlight.flyTo(perfModelsRef.current[0]);
-    }
-  }, [modelsHaveLoaded, camera]);
+  useEffect(
+    () => {
+      if (viewerRef.current && camera) {
+        setCamera(viewerRef.current, camera);
+      }
+    },
+    [camera, viewerCanvas],
+  );
+
+  useEffect(
+    () => {
+      if (!camera && !bcfViewpoint && modelsHaveLoaded) {
+        viewerRef.current.cameraFlight.flyTo(
+          viewerRef.current.scene.models[models[0].id],
+        );
+      }
+    },
+    [models, modelsHaveLoaded, camera, bcfViewpoint],
+  );
 
   return {
     viewerCanvasProps,
