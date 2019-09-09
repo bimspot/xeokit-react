@@ -58,3 +58,43 @@ const getExtension = (fileName) => {
 };
 
 export const getLoaderByExtension = fileName => loaders[getExtension(fileName)];
+
+// camera presets
+export const cameraPresets = [
+  {
+    label: 'front',
+    boundaries: [[7, 7, 4, 4]],
+    dir: [0, 0, -1],
+    up: [0, 1, 0],
+  },
+  {
+    label: 'back',
+    boundaries: [[19, 7, 4, 4]],
+    dir: [0, 0, 1],
+    up: [0, 1, 0],
+  },
+  {
+    label: 'right',
+    boundaries: [[13, 7, 4, 4]],
+    dir: [-1, 0, 0],
+    up: [0, 1, 0],
+  },
+  {
+    label: 'left',
+    boundaries: [[1, 7, 4, 4]],
+    dir: [1, 0, 0],
+    up: [0, 1, 0],
+  },
+  {
+    label: 'top',
+    boundaries: [[7, 1, 4, 4]],
+    dir: [0, -1, 0],
+    up: [0, 0, -1],
+  },
+  {
+    label: 'bottom',
+    boundaries: [[7, 13, 4, 4]],
+    dir: [0, 1, 0],
+    up: [0, 0, 1],
+  },
+];

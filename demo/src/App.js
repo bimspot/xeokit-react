@@ -20,6 +20,13 @@ const App = () => (
     <div className="card bg-light my-5">
       <div className="card-header">Feature</div>
       <div className="card-body">
+        <h4 className="card-title mb-5">Hooks</h4>
+        <Hooks />
+      </div>
+    </div>
+    <div className="card bg-light my-5">
+      <div className="card-header">Feature</div>
+      <div className="card-body">
         <h4 className="card-title mb-5">Hooks Multiple</h4>
         {/* <HooksMultiple /> */}
       </div>
@@ -28,7 +35,7 @@ const App = () => (
       <div className="card-header">Feature</div>
       <div className="card-body">
         <h4 className="card-title mb-5">Hooks Pick</h4>
-        <HooksPick />
+        {/* <HooksPick /> */}
       </div>
     </div>
     <div className="card bg-light my-5">
@@ -36,13 +43,6 @@ const App = () => (
       <div className="card-body">
         <h4 className="card-title mb-5">Hooks BCF</h4>
         {/* <HooksBCF /> */}
-      </div>
-    </div>
-    <div className="card bg-light my-5">
-      <div className="card-header">Feature</div>
-      <div className="card-body">
-        <h4 className="card-title mb-5">Hooks</h4>
-        {/* <Hooks /> */}
       </div>
     </div>
     <div className="card bg-light my-5">

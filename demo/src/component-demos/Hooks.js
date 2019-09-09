@@ -4,12 +4,32 @@ import { hooksModel, hooksSchep } from '../models';
 
 const Hooks = () => {
   const [model, setModel] = useState([hooksModel]);
-  const { viewerCanvasProps, takeScreenshot } = useViewer(model);
+  const {
+    viewerCanvasProps,
+    takeScreenshot,
+    setCameraPreset,
+    faces,
+  } = useViewer(model);
   return (
     <div>
-      <button onClick={() => setModel([hooksSchep])}>Change model</button>
       <canvas id="hooks" {...viewerCanvasProps} width="600" height="600" />
-      <button onClick={takeScreenshot}>Take screenshot</button>
+      <div className="mb-3 d-flex">
+        {/* <button onClick={() => setCameraPreset('front')}>front</button>
+        <button onClick={() => setCameraPreset('right')}>right</button> */}
+        {faces.map(face => (
+          <button
+            className="btn btn-primary my-2 mr-2"
+            key={face}
+            onClick={() => setCameraPreset(face)}
+          >
+            {face}
+          </button>
+        ))}
+      </div>
+      <div>
+        <button onClick={() => setModel([hooksSchep])}>Change model</button>
+        <button onClick={takeScreenshot}>Take screenshot</button>
+      </div>
     </div>
   );
 };
