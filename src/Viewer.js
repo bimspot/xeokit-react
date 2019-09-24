@@ -5,7 +5,7 @@ import { BCFViewpointsPlugin } from 'xeokit-sdk/src/plugins/BCFViewpointsPlugin/
 import { NavCubePlugin } from 'xeokit-sdk/src/plugins/NavCubePlugin/NavCubePlugin';
 import difference from 'lodash.difference';
 
-export const makeViewer = (LoaderPlugin) => {
+export const makeViewer = LoaderPlugin => {
   class ModelViewer extends Component {
     componentDidMount() {
       // Get the necessary props with some nice destructuring
@@ -49,7 +49,7 @@ export const makeViewer = (LoaderPlugin) => {
 
         if (currentProps.bcfViewpoint) this.setBCFViewpoints(perfModels);
 
-        toRemove.forEach((el) => {
+        toRemove.forEach(el => {
           const elID = el.id;
           const elToRemove = this.viewer.scene.models[elID];
           elToRemove.destroy();
@@ -106,12 +106,14 @@ export const makeViewer = (LoaderPlugin) => {
       // we have to wrap each model loaded event with a promise
       // on the load event we immediately call the resolve function
       const promises = models.map(
-        model => new Promise(resolve => model.on('loaded', resolve)),
+        model => new Promise(resolve => model.on('loaded', resolve))
       );
 
       // once all the models have been loaded and thus all the promises
       // have been resolved, we can finally load our viewpoint
-      Promise.all(promises).then(() => this.BCFViewpointsPlugin.setViewpoint(bcfViewpoint));
+      Promise.all(promises).then(() =>
+        this.BCFViewpointsPlugin.setViewpoint(bcfViewpoint)
+      );
     }
 
     loadModels() {
@@ -152,7 +154,7 @@ export const makeViewer = (LoaderPlugin) => {
 
       const { scene } = this.viewer;
 
-      scene.input.on(eventToPickOn, (coords) => {
+      scene.input.on(eventToPickOn, coords => {
         const hit = scene.pick({
           canvasPos: coords,
         });
@@ -238,7 +240,7 @@ export const makeViewer = (LoaderPlugin) => {
       PropTypes.shape({
         id: PropTypes.string.isRequired,
         src: PropTypes.string.isRequired,
-      }),
+      })
     ).isRequired,
     bcfViewpoint: PropTypes.object,
     eventToPickOn: PropTypes.string,

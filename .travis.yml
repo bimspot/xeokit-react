@@ -10,5 +10,6 @@ before_script:
 
 script:
   - npm run lint
+  - npm run prettier-check
   - npm run build
   # - npm test
