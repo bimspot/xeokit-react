@@ -4,6 +4,7 @@ import { useState, useMemo, useEffect, useRef, useCallback } from 'react';
 // Xeokit related imports
 import { Viewer } from 'xeokit-sdk/src/viewer/Viewer';
 import { BCFViewpointsPlugin } from 'xeokit-sdk/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin';
+import { SectionPlanesPlugin } from 'xeokit-sdk/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin';
 import { math } from 'xeokit-sdk/src/viewer/scene/math/math';
 import {
   pickEntity,
@@ -27,6 +28,12 @@ const useViewer = (
 
   // A piece of state that returns the preset angles the viewer can face
   const [faces, setFaces] = useState([]);
+
+  // A piece of state that returns whether section planes are enabled
+  const [sectionPlanesStatus, setSectionPlanesStatus] = useState(false);
+
+  // A piece of state that governs whether section plane gizmo is visible
+  const [sectionPlanesVisibility, setSectionPlanesVisibility] = useState(false);
 
   // ref for the Viewer that xeokit creates
   const viewerRef = useRef();
@@ -170,6 +177,51 @@ const useViewer = (
     setFaces(localFaces);
   }, [setFaces]);
 
+  useEffect(() => {
+    if (modelsHaveLoaded) {
+      if (sectionPlanesStatus) {
+        const sectionPlanesPlugin =
+          viewerRef.current.plugins.SectionPlanes ||
+          new SectionPlanesPlugin(viewerRef.current);
+
+        sectionPlanesPlugin.createSectionPlane({
+          id: 'mySectionPlane1',
+          pos: [0, 0, 0],
+          dir: [0.5, 0.5, 0.5],
+        });
+
+        // sectionPlanesPlugin.showControl('mySectionPlane1');
+        setSectionPlanesVisibility(true);
+      } else if (
+        viewerRef.current.scene.sectionPlanes &&
+        viewerRef.current.scene.sectionPlanes.mySectionPlane1
+      ) {
+        viewerRef.current.scene.sectionPlanes.mySectionPlane1.destroy();
+      }
+    }
+  }, [sectionPlanesStatus, modelsHaveLoaded]);
+
+  useEffect(() => {
+    if (sectionPlanesStatus) {
+      const sectionPlanes = viewerRef.current.plugins.SectionPlanes;
+      if (!sectionPlanesVisibility) {
+        sectionPlanes.hideControl();
+      } else {
+        sectionPlanes.showControl('mySectionPlane1');
+      }
+    }
+  }, [sectionPlanesVisibility, sectionPlanesStatus]);
+
+  const sectionPlanesControl = {
+    enabled: sectionPlanesStatus,
+    toggleStatus: () => setSectionPlanesStatus(prevState => !prevState),
+    // enable: () => setSectionPlanesStatus(true),
+    // disable: () => setSectionPlanesStatus(false),
+    toggleVisibility: () => setSectionPlanesVisibility(prevState => !prevState),
+    // show: () => setSectionPlanesVisibility(true),
+    // hide: () => setSectionPlanesVisibility(false),
+  };
+
   return {
     viewerCanvasProps,
     takeScreenshot,
@@ -177,6 +229,7 @@ const useViewer = (
     pickedEntityID,
     faces,
     setCameraPreset,
+    sectionPlanesControl,
   };
 };
 

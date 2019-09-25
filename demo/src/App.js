@@ -11,6 +11,7 @@ import Hooks from './component-demos/Hooks';
 import HooksBCF from './component-demos/HooksBCF';
 import HooksPick from './component-demos/HooksPick';
 import HooksMultiple from './component-demos/HooksMultiple';
+import HooksSP from './component-demos/HooksSP';
 
 const App = () => (
   <div className="container my-5">
@@ -21,7 +22,14 @@ const App = () => (
       <div className="card-header">Feature</div>
       <div className="card-body">
         <h4 className="card-title mb-5">Hooks</h4>
-        <Hooks />
+        <HooksSP />
+      </div>
+    </div>
+    <div className="card bg-light my-5">
+      <div className="card-header">Feature</div>
+      <div className="card-body">
+        <h4 className="card-title mb-5">Hooks</h4>
+        {/* <Hooks /> */}
       </div>
     </div>
     <div className="card bg-light my-5">
