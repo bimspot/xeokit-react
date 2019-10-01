@@ -15,7 +15,12 @@ import {
 
 const useViewer = (
   models,
-  { bcfViewpoint, eventToPickOn = 'mouseclicked', camera } = {}
+  {
+    bcfViewpoint,
+    eventToPickOn = 'mouseclicked',
+    camera,
+    sectionPlanePos = [0, 0, 0],
+  } = {}
 ) => {
   // Store canvas reference of main viewer
   const [viewerCanvas, setViewerCanvas] = useState(null);
@@ -186,7 +191,7 @@ const useViewer = (
 
         sectionPlanesPlugin.createSectionPlane({
           id: 'mySectionPlane1',
-          pos: [0, 0, 0],
+          pos: sectionPlanePos,
           dir: [0.5, 0.5, 0.5],
         });
 

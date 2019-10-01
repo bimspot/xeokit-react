@@ -5,12 +5,14 @@ import useViewer from 'xeokit-react/useViewer';
 const myModel = [hooksModel];
 
 const HooksSP = () => {
-  const { viewerCanvasProps, sectionPlanesControl } = useViewer(myModel);
+  const { viewerCanvasProps, sectionPlanesControl } = useViewer(myModel, {
+    sectionPlanePos: [1, 1, 1],
+  });
   return (
     <div>
       <div>
         <button onClick={sectionPlanesControl.toggleStatus}>
-          Toggle section plane control
+          Toggle section plane control yo
         </button>
         {sectionPlanesControl.enabled ? (
           <button onClick={sectionPlanesControl.toggleVisibility}>
