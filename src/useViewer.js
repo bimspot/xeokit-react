@@ -13,13 +13,15 @@ import {
   cameraPresets,
 } from './utils';
 
+const defaultSectionPlanePos = [0, 0, 0];
+
 const useViewer = (
   models,
   {
     bcfViewpoint,
     eventToPickOn = 'mouseclicked',
     camera,
-    sectionPlanePos = [0, 0, 0],
+    sectionPlanePos = defaultSectionPlanePos,
   } = {}
 ) => {
   // Store canvas reference of main viewer
@@ -189,6 +191,7 @@ const useViewer = (
           viewerRef.current.plugins.SectionPlanes ||
           new SectionPlanesPlugin(viewerRef.current);
 
+        console.log(sectionPlanePos);
         sectionPlanesPlugin.createSectionPlane({
           id: 'mySectionPlane1',
           pos: sectionPlanePos,
@@ -204,7 +207,7 @@ const useViewer = (
         viewerRef.current.scene.sectionPlanes.mySectionPlane1.destroy();
       }
     }
-  }, [sectionPlanesStatus, modelsHaveLoaded]);
+  }, [sectionPlanesStatus, modelsHaveLoaded, sectionPlanePos]);
 
   useEffect(() => {
     if (sectionPlanesStatus) {

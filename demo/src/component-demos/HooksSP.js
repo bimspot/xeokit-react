@@ -4,9 +4,11 @@ import useViewer from 'xeokit-react/useViewer';
 
 const myModel = [hooksModel];
 
+const sectionPlanePos = [1, 1, 1];
+
 const HooksSP = () => {
   const { viewerCanvasProps, sectionPlanesControl } = useViewer(myModel, {
-    sectionPlanePos: [1, 1, 1],
+    sectionPlanePos,
   });
   return (
     <div>
