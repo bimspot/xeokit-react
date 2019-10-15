@@ -152,6 +152,9 @@ const useViewer = (
         // Clean up stuff (destroy Viewer, etc.)
         setModelsHaveLoaded(false);
 
+        // Clean up entity ID
+        setPickedEntityID(null);
+
         // Destroy the viewer
         viewerRef.current.destroy();
       }
