@@ -4,7 +4,6 @@ import { useState, useMemo, useEffect, useRef, useCallback } from 'react';
 // Xeokit related imports
 import { Viewer } from 'xeokit-sdk/src/viewer/Viewer';
 import { BCFViewpointsPlugin } from 'xeokit-sdk/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin';
-import { SectionPlanesPlugin } from 'xeokit-sdk/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin';
 import { math } from 'xeokit-sdk/src/viewer/scene/math/math';
 import {
   pickEntity,
@@ -12,17 +11,11 @@ import {
   getLoaderByExtension,
   cameraPresets,
 } from './utils';
-
-const defaultSectionPlanePos = [0, 0, 0];
+import { useSectionPlanes } from './sectionPlanes';
 
 const useViewer = (
   models,
-  {
-    bcfViewpoint,
-    eventToPickOn = 'mouseclicked',
-    camera,
-    sectionPlanePos = defaultSectionPlanePos,
-  } = {}
+  { bcfViewpoint, eventToPickOn = 'mouseclicked', camera, sectionPlane } = {}
 ) => {
   // Store canvas reference of main viewer
   const [viewerCanvas, setViewerCanvas] = useState(null);
@@ -36,14 +29,14 @@ const useViewer = (
   // A piece of state that returns the preset angles the viewer can face
   const [faces, setFaces] = useState([]);
 
-  // A piece of state that returns whether section planes are enabled
-  const [sectionPlanesStatus, setSectionPlanesStatus] = useState(false);
-
-  // A piece of state that governs whether section plane gizmo is visible
-  const [sectionPlanesVisibility, setSectionPlanesVisibility] = useState(false);
-
   // ref for the Viewer that xeokit creates
   const viewerRef = useRef();
+
+  // Controls for section planes
+  const sectionPlanesControl = useSectionPlanes(
+    viewerRef.current,
+    sectionPlane
+  );
 
   // Props to use with the canvas
   const viewerCanvasProps = useMemo(() => ({ ref: setViewerCanvas }), [
@@ -183,52 +176,6 @@ const useViewer = (
     const localFaces = cameraPresets.map(({ label }) => label);
     setFaces(localFaces);
   }, [setFaces]);
-
-  useEffect(() => {
-    if (modelsHaveLoaded) {
-      if (sectionPlanesStatus) {
-        const sectionPlanesPlugin =
-          viewerRef.current.plugins.SectionPlanes ||
-          new SectionPlanesPlugin(viewerRef.current);
-
-        console.log(sectionPlanePos);
-        sectionPlanesPlugin.createSectionPlane({
-          id: 'mySectionPlane1',
-          pos: sectionPlanePos,
-          dir: [0.5, 0.5, 0.5],
-        });
-
-        // sectionPlanesPlugin.showControl('mySectionPlane1');
-        setSectionPlanesVisibility(true);
-      } else if (
-        viewerRef.current.scene.sectionPlanes &&
-        viewerRef.current.scene.sectionPlanes.mySectionPlane1
-      ) {
-        viewerRef.current.scene.sectionPlanes.mySectionPlane1.destroy();
-      }
-    }
-  }, [sectionPlanesStatus, modelsHaveLoaded, sectionPlanePos]);
-
-  useEffect(() => {
-    if (sectionPlanesStatus) {
-      const sectionPlanes = viewerRef.current.plugins.SectionPlanes;
-      if (!sectionPlanesVisibility) {
-        sectionPlanes.hideControl();
-      } else {
-        sectionPlanes.showControl('mySectionPlane1');
-      }
-    }
-  }, [sectionPlanesVisibility, sectionPlanesStatus]);
-
-  const sectionPlanesControl = {
-    enabled: sectionPlanesStatus,
-    toggleStatus: () => setSectionPlanesStatus(prevState => !prevState),
-    // enable: () => setSectionPlanesStatus(true),
-    // disable: () => setSectionPlanesStatus(false),
-    toggleVisibility: () => setSectionPlanesVisibility(prevState => !prevState),
-    // show: () => setSectionPlanesVisibility(true),
-    // hide: () => setSectionPlanesVisibility(false),
-  };
 
   return {
     viewerCanvasProps,
