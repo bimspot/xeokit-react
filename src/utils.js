@@ -27,6 +27,7 @@ export const pickEntity = (viewer, eventToPickOn, setPickedEntityID) => {
     } else if (lastEntity) {
       lastEntity.colorize = lastColorize;
       lastEntity = null;
+      setPickedEntityID(null);
     }
   });
 };
