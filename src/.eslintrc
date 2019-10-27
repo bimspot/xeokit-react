@@ -1,35 +1,19 @@
 {
-  "extends": [
-    "airbnb",
-    "prettier/react",
-    "plugin:jest/recommended",
-    "plugin:react/recommended"
-  ],
-  "plugins": ["prettier", "jest", "react-hooks"],
-  "parserOptions": {
-    "sourceType": "module",
-    "ecmaFeatures": {
-      "jsx": true
-    }
-  },
+  "extends": ["eslint:recommended", "plugin:react/recommended"],
+  "plugins": ["react", "react-hooks"],
+  "settings": { "react": { "version": "latest" } },
   "env": {
     "es6": true,
     "browser": true,
-    "jest": true
+    "node": true
   },
-  "globals": {
-    "_": true
+  "parser": "babel-eslint",
+  "parserOptions": {
+    "sourceType": "module",
+    "allowImportExportEverywhere": false,
+    "codeFrame": true
   },
   "rules": {
-    "indent": ["error", 2],
-    "react/require-default-props": "off",
-    "react/forbid-prop-types": "off",
-    "react/jsx-filename-extension": "off",
-    "react/jsx-uses-vars": "error",
-    "react/jsx-uses-react": "error",
-    "padded-blocks": "off",
-    "import/no-unresolved": "off",
-    "import/prefer-default-export": "off",
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn"
   }

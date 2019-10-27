@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "devDependencies": {
+    "prettier": "^1.18.2",
     "react-scripts": "3.0.1"
   },
   "dependencies": {
@@ -15,7 +16,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "prettier-check": "prettier --check src/**/*.js",
+    "prettier-format": "prettier --write src/**/*.js"
   },
   "eslintConfig": {
     "extends": "react-app"

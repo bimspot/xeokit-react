@@ -7,7 +7,7 @@ export const pickEntity = (viewer, eventToPickOn, setPickedEntityID) => {
 
   const { scene } = viewer;
 
-  scene.input.on(eventToPickOn, (coords) => {
+  scene.input.on(eventToPickOn, coords => {
     const hit = scene.pick({
       canvasPos: coords,
     });
@@ -36,7 +36,7 @@ export const setCamera = (viewer, cameraSettings) => {
 
   const keys = Object.keys(cameraSettings);
 
-  keys.forEach((key) => {
+  keys.forEach(key => {
     const prop = camera[key];
     const val = cameraSettings[key];
     if (typeof prop === 'function') {
@@ -52,7 +52,7 @@ const loaders = {
   xkt: XKTLoaderPlugin,
 };
 
-const getExtension = (fileName) => {
+const getExtension = fileName => {
   const extension = fileName.match(/\.(\w+)$/);
   return extension && extension[1].toLowerCase();
 };

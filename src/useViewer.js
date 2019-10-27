@@ -1,7 +1,5 @@
 // React related imports
-import {
-  useState, useMemo, useEffect, useRef, useCallback,
-} from 'react';
+import { useState, useMemo, useEffect, useRef, useCallback } from 'react';
 
 // Xeokit related imports
 import { Viewer } from 'xeokit-sdk/src/viewer/Viewer';
@@ -13,10 +11,11 @@ import {
   getLoaderByExtension,
   cameraPresets,
 } from './utils';
+import { useSectionPlanes } from './sectionPlanes';
 
 const useViewer = (
   models,
-  { bcfViewpoint, eventToPickOn = 'mouseclicked', camera } = {},
+  { bcfViewpoint, eventToPickOn = 'mouseclicked', camera, sectionPlane } = {}
 ) => {
   // Store canvas reference of main viewer
   const [viewerCanvas, setViewerCanvas] = useState(null);
@@ -32,6 +31,12 @@ const useViewer = (
 
   // ref for the Viewer that xeokit creates
   const viewerRef = useRef();
+
+  // Controls for section planes
+  const sectionPlanesControl = useSectionPlanes(
+    viewerRef.current,
+    sectionPlane
+  );
 
   // Props to use with the canvas
   const viewerCanvasProps = useMemo(() => ({ ref: setViewerCanvas }), [
@@ -59,19 +64,20 @@ const useViewer = (
   // TODO:
   // don't reload if viewpoint hasn't changed
   const setBcfViewpoint = useCallback(
-    (viewpoint) => {
+    viewpoint => {
       if (viewerRef.current && modelsHaveLoaded) {
-        const plugin = viewerRef.current.plugins.BCFViewpoints
-          || new BCFViewpointsPlugin(viewerRef.current);
+        const plugin =
+          viewerRef.current.plugins.BCFViewpoints ||
+          new BCFViewpointsPlugin(viewerRef.current);
 
         plugin.setViewpoint(viewpoint);
       }
     },
-    [modelsHaveLoaded],
+    [modelsHaveLoaded]
   );
 
   // set camera preset
-  const setCameraPreset = (preset) => {
+  const setCameraPreset = preset => {
     const faceObj = cameraPresets.find(({ label }) => label === preset);
     // console.log('faces');
     // console.log(faces);
@@ -112,17 +118,19 @@ const useViewer = (
 
       // Initialise loader plugin (eg. gltfLoader, xktLoader) and load models
       const promises = models.map(
-        model => new Promise((resolve) => {
-          const LoaderPlugin = getLoaderByExtension(model.src);
-          if (!LoaderPlugin) {
-            resolve();
-            return;
-          }
-          const loader = viewerRef.current.plugins[LoaderPlugin.name]
-              || new LoaderPlugin(viewerRef.current, { id: LoaderPlugin.name });
-          const perfModel = loader.load(model);
-          perfModel.on('loaded', resolve);
-        }),
+        model =>
+          new Promise(resolve => {
+            const LoaderPlugin = getLoaderByExtension(model.src);
+            if (!LoaderPlugin) {
+              resolve();
+              return;
+            }
+            const loader =
+              viewerRef.current.plugins[LoaderPlugin.name] ||
+              new LoaderPlugin(viewerRef.current, { id: LoaderPlugin.name });
+            const perfModel = loader.load(model);
+            perfModel.on('loaded', resolve);
+          })
       );
 
       // once all the models have been loaded and thus all the promises
@@ -159,7 +167,7 @@ const useViewer = (
   useEffect(() => {
     if (!camera && !bcfViewpoint && modelsHaveLoaded) {
       viewerRef.current.cameraFlight.flyTo(
-        viewerRef.current.scene.models[models[0].id],
+        viewerRef.current.scene.models[models[0].id]
       );
     }
   }, [models, modelsHaveLoaded, camera, bcfViewpoint]);
@@ -176,6 +184,7 @@ const useViewer = (
     pickedEntityID,
     faces,
     setCameraPreset,
+    sectionPlanesControl,
   };
 };
 
