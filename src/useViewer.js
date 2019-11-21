@@ -169,9 +169,8 @@ const useViewer = (
 
   useEffect(() => {
     if (!camera && !bcfViewpoint && modelsHaveLoaded) {
-      viewerRef.current.cameraFlight.flyTo(
-        viewerRef.current.scene.models[models[0].id]
-      );
+      const model = viewerRef.current.scene.models[models[0].id];
+      if (model) viewerRef.current.cameraFlight.flyTo(model);
     }
   }, [models, modelsHaveLoaded, camera, bcfViewpoint]);
 
