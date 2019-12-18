@@ -8,14 +8,21 @@ import { math } from 'xeokit-sdk/src/viewer/scene/math/math';
 import {
   pickEntity,
   setCamera,
-  getLoaderByExtension,
   cameraPresets,
+  getExtension,
+  defaultLoaders,
 } from './utils';
 import { useSectionPlanes } from './sectionPlanes';
 
 const useViewer = (
   models,
-  { bcfViewpoint, eventToPickOn = 'mouseclicked', camera, sectionPlane } = {}
+  {
+    bcfViewpoint,
+    eventToPickOn = 'mouseclicked',
+    camera,
+    sectionPlane,
+    loaders = defaultLoaders,
+  } = {}
 ) => {
   // Store canvas reference of main viewer
   const [viewerCanvas, setViewerCanvas] = useState(null);
@@ -120,14 +127,18 @@ const useViewer = (
       const promises = models.map(
         model =>
           new Promise(resolve => {
-            const LoaderPlugin = getLoaderByExtension(model.src);
+            const { loader: LoaderPlugin, dataSource } =
+              loaders[getExtension(model.src)] || {};
             if (!LoaderPlugin) {
               resolve();
               return;
             }
             const loader =
               viewerRef.current.plugins[LoaderPlugin.name] ||
-              new LoaderPlugin(viewerRef.current, { id: LoaderPlugin.name });
+              new LoaderPlugin(viewerRef.current, {
+                id: LoaderPlugin.name,
+                dataSource,
+              });
             const perfModel = loader.load(model);
             perfModel.on('loaded', resolve);
           })
@@ -152,7 +163,7 @@ const useViewer = (
         viewerRef.current.destroy();
       }
     };
-  }, [viewerCanvas, models, eventToPickOn]);
+  }, [viewerCanvas, models, eventToPickOn, loaders]);
 
   useEffect(() => {
     // BCF Viewpoint loading logic

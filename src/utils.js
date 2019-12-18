@@ -48,17 +48,15 @@ export const setCamera = (viewer, cameraSettings) => {
   });
 };
 
-const loaders = {
-  gltf: GLTFLoaderPlugin,
-  xkt: XKTLoaderPlugin,
+export const defaultLoaders = {
+  gltf: { loader: GLTFLoaderPlugin },
+  xkt: { loader: XKTLoaderPlugin },
 };
 
-const getExtension = fileName => {
+export const getExtension = fileName => {
   const extension = fileName.match(/\.(\w+)$/);
   return extension && extension[1].toLowerCase();
 };
-
-export const getLoaderByExtension = fileName => loaders[getExtension(fileName)];
 
 // camera presets
 export const cameraPresets = [
