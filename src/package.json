@@ -1,6 +1,6 @@
 {
   "name": "xeokit-react",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "",
   "main": "build/xeokit-react.js",
   "scripts": {
@@ -40,7 +40,7 @@
   },
   "peerDependencies": {
     "react": "^16.8.6",
-    "xeokit-sdk": "github:xeokit/xeokit-sdk"
+    "@xeokit/xeokit-sdk": "0.9.1"
   },
   "dependencies": {
     "lodash.difference": "^4.5.0",

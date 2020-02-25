@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Viewer } from 'xeokit-sdk/src/viewer/Viewer';
-import { BCFViewpointsPlugin } from 'xeokit-sdk/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin';
-import { NavCubePlugin } from 'xeokit-sdk/src/plugins/NavCubePlugin/NavCubePlugin';
+import { Viewer } from '@xeokit/xeokit-sdk/src/viewer/Viewer';
+import { BCFViewpointsPlugin } from '@xeokit/xeokit-sdk/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin';
+import { NavCubePlugin } from '@xeokit/xeokit-sdk/src/plugins/NavCubePlugin/NavCubePlugin';
 import difference from 'lodash.difference';
 
 export const makeViewer = LoaderPlugin => {

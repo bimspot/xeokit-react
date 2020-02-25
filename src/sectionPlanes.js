@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { SectionPlanesPlugin } from 'xeokit-sdk/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin';
+import { SectionPlanesPlugin } from '@xeokit/xeokit-sdk/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin';
 
 // Section planes states
 const VISIBLE = 'VISIBLE';
