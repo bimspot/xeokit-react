@@ -133,8 +133,10 @@ const useViewer = (
               resolve();
               return;
             }
+
+            const plugins = viewerRef.current.plugins;
             const loader =
-              viewerRef.current.plugins[LoaderPlugin.name] ||
+              (plugins && plugins[LoaderPlugin.name]) ||
               new LoaderPlugin(viewerRef.current, {
                 id: LoaderPlugin.name,
                 dataSource,
