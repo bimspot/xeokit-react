@@ -49,6 +49,11 @@ export const useLoaders = (
       if (pickedEntity && pickedEntity.model.destroyed) {
         setPickedEntity(null);
       }
+
+      if (!toAdd.length) {
+        return;
+      }
+
       const promises = toAdd.map(
         model =>
           new Promise(resolve => {

@@ -4,7 +4,7 @@ import { hooksModel, hooksSchep } from '../models';
 
 const myModels = [hooksModel, hooksSchep].map(model => ({
   ...model,
-  isChecked: true,
+  isChecked: false,
 }));
 
 const HooksChange = () => {
