@@ -1,5 +1,6 @@
 import { GLTFLoaderPlugin } from '@xeokit/xeokit-sdk/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin';
 import { XKTLoaderPlugin } from '@xeokit/xeokit-sdk/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin';
+import { math } from '@xeokit/xeokit-sdk/src/viewer/scene/math/math';
 
 export const pickEntity = (viewer, eventToPickOn, setPickedEntityID) => {
   let lastEntity = null;
@@ -8,14 +9,18 @@ export const pickEntity = (viewer, eventToPickOn, setPickedEntityID) => {
   const { scene } = viewer;
 
   scene.input.on(eventToPickOn, coords => {
+    if (lastEntity && lastEntity.model.destroyed) {
+      lastEntity = null;
+      lastColorize = null;
+      setPickedEntityID(null);
+    }
+
     const hit = scene.pick({
       canvasPos: coords,
     });
 
     if (hit) {
-      // eslint-disable-next-line no-console
-      console.log(hit.entity.id);
-      setPickedEntityID(hit.entity.id);
+      setPickedEntityID(hit.entity);
       if (!lastEntity || hit.entity.id !== lastEntity.id) {
         if (lastEntity) {
           lastEntity.colorize = lastColorize;
@@ -97,3 +102,29 @@ export const cameraPresets = [
     up: [0, 0, 1],
   },
 ];
+
+// set camera preset
+export const setCameraPreset = (viewer, modelsHaveLoaded) => preset => {
+  const faceObj = cameraPresets.find(({ label }) => label === preset);
+
+  if (modelsHaveLoaded) {
+    const center = math.vec3();
+    const { aabb } = viewer.scene;
+    const diag = math.getAABB3Diag(aabb);
+    math.getAABB3Center(aabb, center);
+    const dist = Math.abs(diag / Math.tan(55.0 / 2));
+
+    viewer.cameraFlight.flyTo({
+      look: center,
+      eye: [
+        center[0] - dist * faceObj.dir[0],
+        center[1] - dist * faceObj.dir[1],
+        center[2] - dist * faceObj.dir[2],
+      ],
+      up: faceObj.up || [0, 1, 0],
+      orthoScale: diag * 1.3,
+      fitFOV: 45,
+      duration: 0.5,
+    });
+  }
+};

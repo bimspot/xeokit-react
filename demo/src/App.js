@@ -13,6 +13,7 @@ import HooksPick from './component-demos/HooksPick';
 import HooksMultiple from './component-demos/HooksMultiple';
 import HooksSP from './component-demos/HooksSP';
 import HooksImprovedSP from './component-demos/HooksImprovedSP';
+import HooksChange from './component-demos/HooksChange';
 
 const App = () => (
   <div className="container my-5">
@@ -22,9 +23,16 @@ const App = () => (
     <div className="card bg-light my-5">
       <div className="card-header">Feature</div>
       <div className="card-body">
+        <h4 className="card-title mb-5">Hooks change</h4>
+        <HooksChange />
+      </div>
+    </div>
+    <div className="card bg-light my-5">
+      <div className="card-header">Feature</div>
+      <div className="card-body">
         <h4 className="card-title mb-5">Hooks Section planes</h4>
         {/* <HooksSP /> */}
-        <HooksImprovedSP />
+        {/* <HooksImprovedSP /> */}
       </div>
     </div>
     <div className="card bg-light my-5">
