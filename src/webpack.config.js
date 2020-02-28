@@ -18,5 +18,5 @@ module.exports = {
       },
     ],
   },
-  externals: [{ react: 'commonjs react' }, /^xeokit-sdk\/.+$/],
+  externals: [{ react: 'commonjs react' }, /^@xeokit\/xeokit-sdk\/.+$/],
 };

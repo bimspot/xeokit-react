@@ -2,9 +2,9 @@
 import { useState, useMemo, useEffect, useRef, useCallback } from 'react';
 
 // Xeokit related imports
-import { Viewer } from 'xeokit-sdk/src/viewer/Viewer';
-import { BCFViewpointsPlugin } from 'xeokit-sdk/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin';
-import { math } from 'xeokit-sdk/src/viewer/scene/math/math';
+import { Viewer } from '@xeokit/xeokit-sdk/src/viewer/Viewer';
+import { BCFViewpointsPlugin } from '@xeokit/xeokit-sdk/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin';
+import { math } from '@xeokit/xeokit-sdk/src/viewer/scene/math/math';
 import {
   pickEntity,
   setCamera,
