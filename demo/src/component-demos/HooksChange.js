@@ -19,9 +19,13 @@ const HooksChange = () => {
 
   const modelsToLoad = models.filter(model => model.isChecked);
 
-  const { viewerCanvasProps, faces, setCameraPreset, pickedEntity } = useViewer(
-    modelsToLoad
-  );
+  const {
+    viewerCanvasProps,
+    navCubeCanvasProps,
+    faces,
+    setCameraPreset,
+    pickedEntity,
+  } = useViewer(modelsToLoad);
 
   return (
     <div>
@@ -58,6 +62,7 @@ const HooksChange = () => {
           height="600"
         />
       ) : null}
+      <canvas {...navCubeCanvasProps} />
     </div>
   );
 };

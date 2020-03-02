@@ -3,6 +3,7 @@ import { useState, useMemo, useEffect } from 'react';
 
 // Xeokit related imports
 import { Viewer } from '@xeokit/xeokit-sdk/src/viewer/Viewer';
+import { NavCubePlugin } from '@xeokit/xeokit-sdk/src/plugins/NavCubePlugin/NavCubePlugin';
 import { pickEntity, setCameraPreset, cameraPresets } from './utils';
 import { useLoaders } from './loaders';
 
@@ -25,13 +26,24 @@ const useViewer = (
     setPickedEntity
   );
 
-  // Props to use with the canvas
+  // Props to use with the viewer canvas
   const viewerCanvasProps = useMemo(
     () => ({
       ref: canvasElement =>
         setViewer(canvasElement ? new Viewer({ canvasElement }) : null),
     }),
     [setViewer]
+  );
+
+  // Props to use with the nav cube canvas
+  const navCubeCanvasProps = useMemo(
+    () => ({
+      ref: canvasElement =>
+        canvasElement && viewer
+          ? new NavCubePlugin(viewer, { canvasElement })
+          : viewer && viewer.plugins && viewer.plugins.NavCubePlugin.destroy(),
+    }),
+    [viewer]
   );
 
   // Take screenshot feature
@@ -73,6 +85,7 @@ const useViewer = (
 
   return {
     viewerCanvasProps,
+    navCubeCanvasProps,
     takeScreenshot,
     setCameraPreset: setCameraPreset(viewer, modelsHaveLoaded),
     pickedEntity: pickedEntity
