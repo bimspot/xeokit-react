@@ -4,7 +4,7 @@
   "private": true,
   "devDependencies": {
     "prettier": "^1.18.2",
-    "react-scripts": "^3.3.0"
+    "react-scripts": "^3.4.0"
   },
   "dependencies": {
     "@xeokit/xeokit-sdk": "0.9.1",

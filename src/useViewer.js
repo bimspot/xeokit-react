@@ -41,7 +41,7 @@ const useViewer = (
       ref: canvasElement =>
         canvasElement && viewer
           ? new NavCubePlugin(viewer, { canvasElement })
-          : viewer && viewer.plugins && viewer.plugins.NavCubePlugin.destroy(),
+          : viewer?.plugins?.NavCubePlugin.destroy(),
     }),
     [viewer]
   );
