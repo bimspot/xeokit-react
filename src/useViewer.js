@@ -75,7 +75,9 @@ const useViewer = (
     viewerCanvasProps,
     takeScreenshot,
     setCameraPreset: setCameraPreset(viewer, modelsHaveLoaded),
-    pickedEntityID: pickedEntity ? pickedEntity.id : '',
+    pickedEntity: pickedEntity
+      ? { entityId: pickedEntity.id, modelId: pickedEntity.model.id }
+      : { entityId: '', modelId: '' },
     faces,
   };
 };

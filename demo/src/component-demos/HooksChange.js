@@ -19,16 +19,14 @@ const HooksChange = () => {
 
   const modelsToLoad = models.filter(model => model.isChecked);
 
-  const {
-    viewerCanvasProps,
-    faces,
-    setCameraPreset,
-    pickedEntityID,
-  } = useViewer(modelsToLoad);
+  const { viewerCanvasProps, faces, setCameraPreset, pickedEntity } = useViewer(
+    modelsToLoad
+  );
 
   return (
     <div>
-      <div>{pickedEntityID}</div>
+      <div>{pickedEntity.modelId}</div>
+      <div>{pickedEntity.entityId}</div>
       <button onClick={() => setShow(!show)}>Toggle viewer</button>
       {faces.map(face => (
         <button
