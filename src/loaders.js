@@ -10,7 +10,7 @@ export const defaultLoaders = {
 };
 
 const usePreviousModels = (models, viewer, setModelsHaveLoaded) => {
-  const ref = useRef();
+  const ref = useRef([]);
 
   useEffect(() => {
     if (viewer) {
@@ -24,6 +24,9 @@ const usePreviousModels = (models, viewer, setModelsHaveLoaded) => {
   return ref.current;
 };
 
+const stringify = arr => arr.map(obj => JSON.stringify(obj));
+const parse = arr => arr.map(str => JSON.parse(str));
+
 export const useLoaders = (
   viewer,
   models,
@@ -35,8 +38,11 @@ export const useLoaders = (
   const [modelsHaveLoaded, setModelsHaveLoaded] = useState(false);
   const prevModels = usePreviousModels(models, viewer, setModelsHaveLoaded);
 
-  const toAdd = difference(models, prevModels);
-  const toRemove = difference(prevModels, models);
+  const modelsJSON = stringify(models);
+  const prevModelsJSON = stringify(prevModels);
+
+  const toAdd = parse(difference(modelsJSON, prevModelsJSON));
+  const toRemove = parse(difference(prevModelsJSON, modelsJSON));
 
   useEffect(() => {
     // Initialise loader plugin (eg. gltfLoader, xktLoader) and load models
