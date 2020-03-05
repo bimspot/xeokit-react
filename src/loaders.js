@@ -52,8 +52,12 @@ export const useLoaders = (
         const elToRemove = viewer.scene.models[elID];
         elToRemove && elToRemove.destroy();
       });
-      if (pickedEntity && pickedEntity.model.destroyed) {
+      if (pickedEntity?.model.destroyed) {
         setPickedEntity(null);
+      }
+
+      if (toRemove.length && !toAdd.length) {
+        viewer.cameraFlight.flyTo(viewer.scene.aabb);
       }
 
       if (!toAdd.length) {
@@ -84,18 +88,13 @@ export const useLoaders = (
 
       // once all the models have been loaded and thus all the promises
       // have been resolved, we can finally load our viewpoint
-      Promise.all(promises).then(() => setModelsHaveLoaded(true));
+      Promise.all(promises).then(() => {
+        setModelsHaveLoaded(true);
+        viewer.cameraFlight.flyTo(viewer.scene.aabb);
+      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [viewer, models, loaders, setModelsHaveLoaded]);
-
-  useEffect(() => {
-    if (viewer && modelsHaveLoaded) {
-      const model = viewer.scene.models[models[0] && models[0].id];
-      if (model) viewer.cameraFlight.flyTo(model);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [viewer, modelsHaveLoaded]);
 
   return modelsHaveLoaded;
 };

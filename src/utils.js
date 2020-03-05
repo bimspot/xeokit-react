@@ -2,37 +2,21 @@ import { GLTFLoaderPlugin } from '@xeokit/xeokit-sdk/src/plugins/GLTFLoaderPlugi
 import { XKTLoaderPlugin } from '@xeokit/xeokit-sdk/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin';
 import { math } from '@xeokit/xeokit-sdk/src/viewer/scene/math/math';
 
-export const pickEntity = (viewer, eventToPickOn, setPickedEntityID) => {
-  let lastEntity = null;
-  let lastColorize = null;
-
+export const pickEntity = (viewer, eventToPickOn, setPickedEntity) => {
   const { scene } = viewer;
 
   scene.input.on(eventToPickOn, coords => {
-    if (lastEntity && lastEntity.model.destroyed) {
-      lastEntity = null;
-      lastColorize = null;
-      setPickedEntityID(null);
-    }
+    scene.setObjectsSelected(scene.selectedObjectIds, false);
 
     const hit = scene.pick({
       canvasPos: coords,
     });
 
     if (hit) {
-      setPickedEntityID(hit.entity);
-      if (!lastEntity || hit.entity.id !== lastEntity.id) {
-        if (lastEntity) {
-          lastEntity.colorize = lastColorize;
-        }
-        lastEntity = hit.entity;
-        lastColorize = hit.entity.colorize.slice();
-        hit.entity.colorize = [0.0, 1.0, 0.0];
-      }
-    } else if (lastEntity) {
-      lastEntity.colorize = lastColorize;
-      lastEntity = null;
-      setPickedEntityID(null);
+      setPickedEntity(hit.entity);
+      hit.entity.selected = true;
+    } else {
+      setPickedEntity(null);
     }
   });
 };

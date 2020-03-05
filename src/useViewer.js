@@ -1,9 +1,10 @@
 // React related imports
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useCallback } from 'react';
 
 // Xeokit related imports
 import { Viewer } from '@xeokit/xeokit-sdk/src/viewer/Viewer';
 import { NavCubePlugin } from '@xeokit/xeokit-sdk/src/plugins/NavCubePlugin/NavCubePlugin';
+
 import { pickEntity, setCameraPreset, cameraPresets } from './utils';
 import { useLoaders } from './loaders';
 
@@ -11,7 +12,7 @@ const faces = cameraPresets.map(({ label }) => label);
 
 const useViewer = (
   models,
-  { eventToPickOn = 'mouseclicked', loaders } = {}
+  { eventToPickOn = 'mouseclicked', loaders, xrayPreset } = {}
 ) => {
   // A piece of state that returns the picked entity's ID
   const [pickedEntity, setPickedEntity] = useState(null);
@@ -25,6 +26,10 @@ const useViewer = (
     pickedEntity,
     setPickedEntity
   );
+
+  if (xrayPreset && viewer && viewer.scene.xrayMaterial.preset !== xrayPreset) {
+    viewer.scene.xrayMaterial.preset = xrayPreset;
+  }
 
   // Props to use with the viewer canvas
   const viewerCanvasProps = useMemo(
@@ -83,6 +88,27 @@ const useViewer = (
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [viewer]);
 
+  const setModelsXRayed = useCallback(
+    (modelIds, xrayed) =>
+      modelIds.forEach(id => {
+        const model = viewer?.scene.models[id];
+        if (model && model.xrayed !== xrayed) {
+          model.xrayed = xrayed;
+        }
+      }),
+    [viewer]
+  );
+
+  const setObjectsVisible = useCallback(
+    (objectIds, visible) => viewer?.scene.setObjectsVisible(objectIds, visible),
+    [viewer]
+  );
+
+  const xrayPresets = useMemo(
+    () => (viewer ? Object.keys(viewer.scene.xrayMaterial.presets) : []),
+    [viewer]
+  );
+
   return {
     viewerCanvasProps,
     navCubeCanvasProps,
@@ -92,6 +118,9 @@ const useViewer = (
       ? { entityId: pickedEntity.id, modelId: pickedEntity.model.id }
       : { entityId: '', modelId: '' },
     faces,
+    setObjectsVisible,
+    setModelsXRayed,
+    xrayPresets,
   };
 };
 
