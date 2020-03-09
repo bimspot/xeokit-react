@@ -112,3 +112,9 @@ export const setCameraPreset = (viewer, modelsHaveLoaded) => preset => {
     });
   }
 };
+
+// given an invalid hex value it will return a default green colour
+export const hexToRgb = hex => {
+  const match = hex.match(/#([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})/i);
+  return match ? match.slice(1).map(hex => parseInt(hex, 16) / 255) : [0, 1, 0];
+};

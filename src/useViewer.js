@@ -5,7 +5,7 @@ import { useState, useMemo, useEffect, useCallback } from 'react';
 import { Viewer } from '@xeokit/xeokit-sdk/src/viewer/Viewer';
 import { NavCubePlugin } from '@xeokit/xeokit-sdk/src/plugins/NavCubePlugin/NavCubePlugin';
 
-import { pickEntity, setCameraPreset, cameraPresets } from './utils';
+import { pickEntity, setCameraPreset, cameraPresets, hexToRgb } from './utils';
 import { useLoaders } from './loaders';
 
 const faces = cameraPresets.map(({ label }) => label);
@@ -89,11 +89,23 @@ const useViewer = (
   }, [viewer]);
 
   const setModelsXRayed = useCallback(
-    (modelIds, xrayed) =>
+    (modelIds, xrayed, pickable = true) =>
       modelIds.forEach(id => {
         const model = viewer?.scene.models[id];
         if (model && model.xrayed !== xrayed) {
           model.xrayed = xrayed;
+          model.pickable = pickable || !xrayed;
+        }
+      }),
+    [viewer]
+  );
+
+  const setModelsVisible = useCallback(
+    (modelIds, visible) =>
+      modelIds.forEach(id => {
+        const model = viewer?.scene.models[id];
+        if (model && model.visible !== visible) {
+          model.visible = visible;
         }
       }),
     [viewer]
@@ -101,6 +113,20 @@ const useViewer = (
 
   const setObjectsVisible = useCallback(
     (objectIds, visible) => viewer?.scene.setObjectsVisible(objectIds, visible),
+    [viewer]
+  );
+
+  const setObjectsXRayed = useCallback(
+    (objectIds, xrayed, pickable = true) => {
+      viewer?.scene.setObjectsXRayed(objectIds, xrayed);
+      viewer?.scene.setObjectsPickable(objectIds, pickable || !xrayed);
+    },
+    [viewer]
+  );
+
+  const setObjectsColorized = useCallback(
+    (objectIds, hexColour) =>
+      viewer?.scene.setObjectsColorized(objectIds, hexToRgb(hexColour)),
     [viewer]
   );
 
@@ -119,7 +145,10 @@ const useViewer = (
       : { entityId: '', modelId: '' },
     faces,
     setObjectsVisible,
+    setObjectsColorized,
+    setObjectsXRayed,
     setModelsXRayed,
+    setModelsVisible,
     xrayPresets,
   };
 };

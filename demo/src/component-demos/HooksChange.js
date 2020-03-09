@@ -25,7 +25,10 @@ const HooksChange = () => {
     viewerCanvasProps,
     navCubeCanvasProps,
     setModelsXRayed,
+    setModelsVisible,
     setObjectsVisible,
+    setObjectsColorized,
+    setObjectsXRayed,
     xrayPresets,
     pickedEntity,
   } = useViewer(modelsToLoad, { xrayPreset });
@@ -43,6 +46,19 @@ const HooksChange = () => {
       <button onClick={() => setShow(!show)}>Toggle viewer</button>
       <button onClick={() => setObjectsVisible([pickedEntity.entityId], false)}>
         Hide selected
+      </button>
+      <button
+        onClick={() => setObjectsXRayed([pickedEntity.entityId], true, false)}
+      >
+        Wireframe selected
+      </button>
+      <button
+        onClick={() => setObjectsColorized([pickedEntity.entityId], '#09cad8')}
+      >
+        Colorize selected
+      </button>
+      <button onClick={() => setModelsVisible(['xkt-model'], false)}>
+        Hide xkt-model
       </button>
       <div>
         <label htmlFor="wireframe">Wireframe</label>

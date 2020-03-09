@@ -24,7 +24,6 @@ export const xktModel = {
   src: './xkt/duplex.xkt',
   metaModelSrc: './xkt/duplex.json',
   edges: true,
-  performacne: true,
 };
 
 export const hooksModel = {
@@ -32,7 +31,6 @@ export const hooksModel = {
   src: './xkt/duplex.xkt',
   metaModelSrc: './xkt/duplex.json',
   edges: true,
-  performacne: true,
 };
 
 export const hooksModelv2 = {
@@ -40,12 +38,10 @@ export const hooksModelv2 = {
   src: './xkt/duplex.xkt',
   metaModelSrc: './xkt/duplex.json',
   edges: true,
-  performacne: true,
 };
 
 export const hooksSchep = {
   id: 'xkt-schependomlaan',
   src: './xkt/schependomlaan.xkt',
   edges: true,
-  performacne: true,
 };
