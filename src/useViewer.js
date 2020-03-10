@@ -12,7 +12,7 @@ const faces = cameraPresets.map(({ label }) => label);
 
 const useViewer = (
   models,
-  { eventToPickOn = 'mouseclicked', loaders, xrayPreset } = {}
+  { eventToPickOn = 'mouseclicked', loaders, xraySettings } = {}
 ) => {
   // A piece of state that returns the picked entity's ID
   const [pickedEntity, setPickedEntity] = useState(null);
@@ -27,9 +27,16 @@ const useViewer = (
     setPickedEntity
   );
 
-  if (xrayPreset && viewer && viewer.scene.xrayMaterial.preset !== xrayPreset) {
-    viewer.scene.xrayMaterial.preset = xrayPreset;
-  }
+  useEffect(() => {
+    if (xraySettings && viewer) {
+      Object.keys(xraySettings).forEach(option => {
+        const value = xraySettings[option];
+        if (viewer.scene.xrayMaterial[option] !== value) {
+          viewer.scene.xrayMaterial[option] = value;
+        }
+      });
+    }
+  }, [xraySettings, viewer]);
 
   // Props to use with the viewer canvas
   const viewerCanvasProps = useMemo(

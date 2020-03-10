@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import useViewer from 'xeokit-react/useViewer';
-import { hooksModel, hooksSchep } from '../models';
+import { hooksModel, hooksModelv2, holterTower } from '../models';
 
-const myModels = [hooksModel, hooksSchep].map(model => ({
+const myModels = [hooksModel, hooksModelv2, holterTower].map(model => ({
   ...model,
   isChecked: false,
 }));
@@ -10,7 +10,11 @@ const myModels = [hooksModel, hooksSchep].map(model => ({
 const HooksChange = () => {
   const [show, setShow] = useState(true);
   const [xrayed, setXrayed] = useState(false);
-  const [xrayPreset, setXRayPreset] = useState('sepia');
+  const [xraySettings, setXRaySettings] = useState({
+    preset: 'sepia',
+    fillAlpha: 0.5,
+    edgeAlpha: 1,
+  });
   const [models, setModels] = useState(myModels);
   const handleChange = id => () => {
     const result = models.map(model =>
@@ -31,7 +35,7 @@ const HooksChange = () => {
     setObjectsXRayed,
     xrayPresets,
     pickedEntity,
-  } = useViewer(modelsToLoad, { xrayPreset });
+  } = useViewer(modelsToLoad, { xraySettings });
 
   useEffect(() => {
     setModelsXRayed(models.map(({ id }) => id), xrayed);
@@ -73,8 +77,10 @@ const HooksChange = () => {
         <label htmlFor="preset">Wireframe style</label>
         <select
           id="preset"
-          value={xrayPreset}
-          onChange={evt => setXRayPreset(evt.target.value)}
+          value={xraySettings.preset}
+          onChange={evt =>
+            setXRaySettings({ ...xraySettings, preset: evt.target.value })
+          }
         >
           {xrayPresets.map(name => (
             <option key={name} value={name}>
@@ -82,6 +88,34 @@ const HooksChange = () => {
             </option>
           ))}
         </select>
+      </div>
+      <div>
+        <label htmlFor="fillAlpha">Fill opacity</label>
+        <input
+          type="range"
+          min="0"
+          max="1"
+          step="0.01"
+          value={xraySettings.fillAlpha}
+          id="fillAlpha"
+          onChange={evt =>
+            setXRaySettings({ ...xraySettings, fillAlpha: +evt.target.value })
+          }
+        />
+      </div>
+      <div>
+        <label htmlFor="edgeAlpha">Edge opacity</label>
+        <input
+          type="range"
+          min="0"
+          max="1"
+          step="0.01"
+          value={xraySettings.edgeAlpha}
+          id="edgeAlpha"
+          onChange={evt =>
+            setXRaySettings({ ...xraySettings, edgeAlpha: +evt.target.value })
+          }
+        />
       </div>
 
       {models.map(({ id, isChecked }) => (

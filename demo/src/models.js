@@ -38,10 +38,27 @@ export const hooksModelv2 = {
   src: './xkt/duplex.xkt',
   metaModelSrc: './xkt/duplex.json',
   edges: true,
+  position: [10, 0, 0],
 };
 
 export const hooksSchep = {
   id: 'xkt-schependomlaan',
   src: './xkt/schependomlaan.xkt',
   edges: true,
+};
+
+export const holterTower = {
+  id: 'holter-tower',
+  src: './xkt/HolterTower.xkt',
+  metaModelSrc: './xkt/HolterTower.json',
+  edges: true,
+  // objectDefaults: {
+  //   IfcSpace: {
+  //     pickable: false,
+  //     opacity: 0.2,
+  //   },
+  //   DEFAULT: {
+  //     colorize: [1, 1, 1],
+  //   },
+  // },
 };
