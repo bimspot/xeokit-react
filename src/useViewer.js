@@ -99,7 +99,7 @@ const useViewer = (
     (modelIds, xrayed, pickable = true) =>
       modelIds.forEach(id => {
         const model = viewer?.scene.models[id];
-        if (model && model.xrayed !== xrayed) {
+        if (model) {
           model.xrayed = xrayed;
           model.pickable = pickable || !xrayed;
         }
@@ -111,7 +111,7 @@ const useViewer = (
     (modelIds, visible) =>
       modelIds.forEach(id => {
         const model = viewer?.scene.models[id];
-        if (model && model.visible !== visible) {
+        if (model) {
           model.visible = visible;
         }
       }),

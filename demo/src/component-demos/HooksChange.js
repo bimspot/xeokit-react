@@ -64,6 +64,11 @@ const HooksChange = () => {
       <button onClick={() => setModelsVisible(['xkt-model'], false)}>
         Hide xkt-model
       </button>
+      <button
+        onClick={() => setModelsVisible(models.map(({ id }) => id), true)}
+      >
+        Show all
+      </button>
       <div>
         <label htmlFor="wireframe">Wireframe</label>
         <input
@@ -117,19 +122,23 @@ const HooksChange = () => {
           }
         />
       </div>
-
-      {models.map(({ id, isChecked }) => (
-        <div key={id}>
-          <label htmlFor={id}>{id}</label>
-          <input
-            type="checkbox"
-            name={id}
-            id={id}
-            checked={isChecked}
-            onChange={handleChange(id)}
-          />
-        </div>
-      ))}
+      <div>
+        {models.map(({ id, isChecked }) => (
+          <div key={id} className="d-inline-block">
+            <label htmlFor={id} className="pr-1">
+              {id}
+            </label>
+            <input
+              className="mr-5"
+              type="checkbox"
+              name={id}
+              id={id}
+              checked={isChecked}
+              onChange={handleChange(id)}
+            />
+          </div>
+        ))}
+      </div>
       {show ? (
         <canvas
           id="hooks-change"
