@@ -5,18 +5,24 @@ import { math } from '@xeokit/xeokit-sdk/src/viewer/scene/math/math';
 export const pickEntity = (viewer, eventToPickOn, setPickedEntity) => {
   const { scene } = viewer;
 
+  let lastEntity = null;
+
   scene.input.on(eventToPickOn, coords => {
-    scene.setObjectsSelected(scene.selectedObjectIds, false);
+    if (lastEntity && !lastEntity.model.destroyed) {
+      lastEntity.selected = false;
+    }
 
     const hit = scene.pick({
       canvasPos: coords,
     });
 
     if (hit) {
+      lastEntity = hit.entity;
       setPickedEntity(hit.entity);
       hit.entity.selected = true;
     } else {
       setPickedEntity(null);
+      lastEntity = null;
     }
   });
 };
