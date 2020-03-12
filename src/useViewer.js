@@ -12,7 +12,12 @@ const faces = cameraPresets.map(({ label }) => label);
 
 const useViewer = (
   models,
-  { eventToPickOn = 'mouseclicked', loaders, xraySettings } = {}
+  {
+    eventToPickOn = 'mouseclicked',
+    loaders,
+    xraySettings,
+    flyToModels = false,
+  } = {}
 ) => {
   // A piece of state that returns the picked entity's ID
   const [pickedEntity, setPickedEntity] = useState(null);
@@ -24,7 +29,8 @@ const useViewer = (
     models,
     loaders,
     pickedEntity,
-    setPickedEntity
+    setPickedEntity,
+    flyToModels
   );
 
   useEffect(() => {

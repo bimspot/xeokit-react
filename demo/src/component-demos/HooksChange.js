@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import useViewer from 'xeokit-react/useViewer';
-import { hooksModel, hooksModelv2, holterTower } from '../models';
+import { hooksModel, hooksModelv2, holterTower, hooksSchep } from '../models';
 
-const myModels = [hooksModel, hooksModelv2, holterTower].map(model => ({
-  ...model,
-  isChecked: false,
-}));
+const myModels = [hooksModel, hooksModelv2, hooksSchep, holterTower].map(
+  model => ({
+    ...model,
+    isChecked: false,
+  })
+);
 
 const HooksChange = () => {
   const [show, setShow] = useState(true);
@@ -15,6 +17,7 @@ const HooksChange = () => {
     fillAlpha: 0.5,
     edgeAlpha: 1,
   });
+  const [flyToModels, setFlyToModels] = useState(false);
   const [models, setModels] = useState(myModels);
   const handleChange = id => () => {
     const result = models.map(model =>
@@ -35,7 +38,7 @@ const HooksChange = () => {
     setObjectsXRayed,
     xrayPresets,
     pickedEntity,
-  } = useViewer(modelsToLoad, { xraySettings });
+  } = useViewer(modelsToLoad, { xraySettings, flyToModels });
 
   useEffect(() => {
     setModelsXRayed(models.map(({ id }) => id), xrayed);
@@ -69,6 +72,15 @@ const HooksChange = () => {
       >
         Show all
       </button>
+      <div>
+        <label htmlFor="flyToModels">Fly to models</label>
+        <input
+          type="checkbox"
+          id="flyToModels"
+          checked={flyToModels}
+          onChange={evt => setFlyToModels(evt.target.checked)}
+        />
+      </div>
       <div>
         <label htmlFor="wireframe">Wireframe</label>
         <input

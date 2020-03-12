@@ -32,7 +32,8 @@ export const useLoaders = (
   models,
   loaders = defaultLoaders,
   pickedEntity,
-  setPickedEntity
+  setPickedEntity,
+  flyToModels
 ) => {
   // A piece of state that tells us if the models have been loaded
   const [modelsHaveLoaded, setModelsHaveLoaded] = useState(false);
@@ -57,7 +58,9 @@ export const useLoaders = (
       }
 
       if (toRemove.length && !toAdd.length) {
-        viewer.cameraFlight.flyTo(viewer.scene.aabb);
+        flyToModels
+          ? viewer.cameraFlight.flyTo(viewer.scene.aabb)
+          : viewer.cameraFlight.jumpTo(viewer.scene.aabb);
       }
 
       if (!toAdd.length) {
@@ -82,16 +85,18 @@ export const useLoaders = (
                 dataSource,
               });
             const perfModel = loader.load(model);
-            perfModel.on('loaded', resolve);
+            perfModel.on('loaded', () => {
+              flyToModels
+                ? viewer.cameraFlight.flyTo(viewer.scene.aabb)
+                : viewer.cameraFlight.jumpTo(viewer.scene.aabb);
+              resolve();
+            });
           })
       );
 
       // once all the models have been loaded and thus all the promises
       // have been resolved, we can finally load our viewpoint
-      Promise.all(promises).then(() => {
-        setModelsHaveLoaded(true);
-        viewer.cameraFlight.flyTo(viewer.scene.aabb);
-      });
+      Promise.all(promises).then(() => setModelsHaveLoaded(true));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [viewer, models, loaders, setModelsHaveLoaded]);
