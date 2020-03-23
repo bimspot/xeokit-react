@@ -2,6 +2,45 @@ import { GLTFLoaderPlugin } from '@xeokit/xeokit-sdk/src/plugins/GLTFLoaderPlugi
 import { XKTLoaderPlugin } from '@xeokit/xeokit-sdk/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin';
 import { math } from '@xeokit/xeokit-sdk/src/viewer/scene/math/math';
 
+export const createMap = (array, getKey, value) =>
+  array.reduce((acc, item) => {
+    acc[getKey ? getKey(item) : item] = value || item;
+    return acc;
+  }, Object.create(null));
+
+export const setVisibilityAndAABB = (
+  scene,
+  { id, guids },
+  modelsAABB,
+  makeModelVisible = true
+) => {
+  const model = scene.models[id];
+  if (guids?.length) {
+    const visibilityMap = createMap(guids, null, true);
+
+    modelsAABB[id] = model._nodes.reduce((aabb, node) => {
+      const visible = !!visibilityMap[node.id];
+      node.visible = visible;
+      return visible ? math.expandAABB3(aabb, node.aabb) : aabb;
+    }, math.collapseAABB3());
+  } else {
+    if (makeModelVisible) {
+      model.visible = true;
+    }
+    modelsAABB[id] = model.aabb;
+  }
+};
+
+export const moveCamera = (viewer, modelsAABB, flyToModels) => {
+  const aabbs = Object.values
+    ? Object.values(modelsAABB)
+    : Object.keys(modelsAABB).map(key => modelsAABB[key]);
+  const target = aabbs.reduce(math.expandAABB3, math.collapseAABB3());
+  flyToModels
+    ? viewer.cameraFlight.flyTo(target)
+    : viewer.cameraFlight.jumpTo(target);
+};
+
 export const pickEntity = (viewer, eventToPickOn, setPickedEntity) => {
   const { scene } = viewer;
 

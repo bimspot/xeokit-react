@@ -1,13 +1,12 @@
 import { useRef, useEffect, useState } from 'react';
-import { GLTFLoaderPlugin } from '@xeokit/xeokit-sdk/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin';
-import { XKTLoaderPlugin } from '@xeokit/xeokit-sdk/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin';
-import { getExtension } from './utils';
+import {
+  createMap,
+  defaultLoaders,
+  getExtension,
+  moveCamera,
+  setVisibilityAndAABB,
+} from './utils';
 import difference from 'lodash.difference';
-
-export const defaultLoaders = {
-  gltf: { loader: GLTFLoaderPlugin },
-  xkt: { loader: XKTLoaderPlugin },
-};
 
 const usePreviousModels = (models, viewer, setModelsHaveLoaded) => {
   const ref = useRef([]);
@@ -24,9 +23,6 @@ const usePreviousModels = (models, viewer, setModelsHaveLoaded) => {
   return ref.current;
 };
 
-const stringify = arr => arr.map(obj => JSON.stringify(obj));
-const parse = arr => arr.map(str => JSON.parse(str));
-
 export const useLoaders = (
   viewer,
   models,
@@ -39,37 +35,70 @@ export const useLoaders = (
   const [modelsHaveLoaded, setModelsHaveLoaded] = useState(false);
   const prevModels = usePreviousModels(models, viewer, setModelsHaveLoaded);
 
-  const modelsJSON = stringify(models);
-  const prevModelsJSON = stringify(prevModels);
-
-  const toAdd = parse(difference(modelsJSON, prevModelsJSON));
-  const toRemove = parse(difference(prevModelsJSON, modelsJSON));
+  const modelsAABB = useRef(Object.create(null));
 
   useEffect(() => {
-    // Initialise loader plugin (eg. gltfLoader, xktLoader) and load models
     if (viewer) {
-      toRemove.forEach(el => {
-        const elID = el.id;
-        const elToRemove = viewer.scene.models[elID];
-        elToRemove && elToRemove.destroy();
+      const modelIds = models.map(({ id }) => id);
+      const prevModelIds = prevModels.map(({ id }) => id);
+
+      const toAdd = difference(modelIds, prevModelIds);
+      const toRemove = difference(prevModelIds, modelIds);
+      const toKeep = difference(prevModelIds, toRemove);
+
+      // Remove models that are no longer needed
+      toRemove.forEach(modelId => {
+        viewer.scene.models[modelId]?.destroy();
+        delete modelsAABB.current[modelId];
       });
+
       if (pickedEntity?.model.destroyed) {
         setPickedEntity(null);
       }
 
-      if (toRemove.length && !toAdd.length) {
-        flyToModels
-          ? viewer.cameraFlight.flyTo(viewer.scene.aabb)
-          : viewer.cameraFlight.jumpTo(viewer.scene.aabb);
+      const modelsIdMap = createMap(models, ({ id }) => id);
+      const prevModelsIdMap = createMap(prevModels, ({ id }) => id);
+
+      let guidChanged = false;
+
+      // Update models when guids, xrayed or pickable setting changes
+      toKeep.forEach(modelId => {
+        const model = modelsIdMap[modelId];
+        const prevModel = prevModelsIdMap[modelId];
+        if (model.guids !== prevModel.guids) {
+          guidChanged = true;
+          setVisibilityAndAABB(viewer.scene, model, modelsAABB.current);
+        }
+        ['xrayed', 'pickable'].forEach(property => {
+          if (model[property] !== prevModel[property]) {
+            viewer.scene.models[modelId][property] = model[property];
+          }
+        });
+      });
+
+      // Deselect entity when it's no longer visible
+      if (pickedEntity && !pickedEntity.visible) {
+        pickedEntity.selected = false;
+        setPickedEntity(null);
+      }
+
+      if ((toRemove.length || guidChanged) && !toAdd.length) {
+        moveCamera(viewer, modelsAABB.current, flyToModels);
+      }
+
+      if (!toKeep.length || toAdd.length) {
+        setModelsHaveLoaded(false);
       }
 
       if (!toAdd.length) {
         return;
       }
 
+      // Initialise loader plugin (eg. gltfLoader, xktLoader) and load models
       const promises = toAdd.map(
-        model =>
+        modelId =>
           new Promise(resolve => {
+            const model = modelsIdMap[modelId];
             const { loader: LoaderPlugin, dataSource } =
               loaders[getExtension(model.src)] || {};
             if (!LoaderPlugin) {
@@ -77,18 +106,24 @@ export const useLoaders = (
               return;
             }
 
-            const plugins = viewer.plugins;
             const loader =
-              (plugins && plugins[LoaderPlugin.name]) ||
+              viewer.plugins?.[LoaderPlugin.name] ||
               new LoaderPlugin(viewer, {
                 id: LoaderPlugin.name,
                 dataSource,
               });
-            const perfModel = loader.load(model);
+
+            const perfModel = loader.load(
+              model.guids ? { ...model, visible: false } : model
+            );
             perfModel.on('loaded', () => {
-              flyToModels
-                ? viewer.cameraFlight.flyTo(viewer.scene.aabb)
-                : viewer.cameraFlight.jumpTo(viewer.scene.aabb);
+              setVisibilityAndAABB(
+                viewer.scene,
+                model,
+                modelsAABB.current,
+                false
+              );
+              moveCamera(viewer, modelsAABB.current, flyToModels);
               resolve();
             });
           })

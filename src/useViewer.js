@@ -163,6 +163,7 @@ const useViewer = (
     setModelsXRayed,
     setModelsVisible,
     xrayPresets,
+    modelsHaveLoaded,
   };
 };
 
