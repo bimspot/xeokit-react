@@ -41,31 +41,6 @@ export const moveCamera = (viewer, modelsAABB, flyToModels) => {
     : viewer.cameraFlight.jumpTo(target);
 };
 
-export const pickEntity = (viewer, eventToPickOn, setPickedEntity) => {
-  const { scene } = viewer;
-
-  let lastEntity = null;
-
-  scene.input.on(eventToPickOn, coords => {
-    if (lastEntity && !lastEntity.model.destroyed) {
-      lastEntity.selected = false;
-    }
-
-    const hit = scene.pick({
-      canvasPos: coords,
-    });
-
-    if (hit) {
-      lastEntity = hit.entity;
-      setPickedEntity(hit.entity);
-      hit.entity.selected = true;
-    } else {
-      setPickedEntity(null);
-      lastEntity = null;
-    }
-  });
-};
-
 export const setCamera = (viewer, cameraSettings) => {
   const { camera } = viewer.scene;
 

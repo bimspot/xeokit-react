@@ -32,12 +32,14 @@ const HooksGuids = () => {
   const handleChange = ({ target: { id, value } }) =>
     setSelected({ ...selected, [id]: value });
 
-  const { viewerCanvasProps, modelsHaveLoaded, pickedEntity } = useViewer(
-    getModelsToLoad(selected, wireframe),
-    {
-      flyToModels: true,
-    }
-  );
+  const {
+    viewerCanvasProps,
+    modelsHaveLoaded,
+    pickedEntity,
+    clearEntitySelection,
+  } = useViewer(getModelsToLoad(selected, wireframe), {
+    flyToModels: true,
+  });
 
   return (
     <div>
@@ -47,6 +49,9 @@ const HooksGuids = () => {
           ? `${pickedEntity.entityId} from ${pickedEntity.modelId}`
           : 'None'}
       </div>
+      <button className="d-block btn btn-link" onClick={clearEntitySelection}>
+        Deselect entity
+      </button>
       <div className="form-check form-check-inline">
         <input
           className="form-check-input"

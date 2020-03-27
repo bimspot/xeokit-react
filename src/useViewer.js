@@ -5,8 +5,9 @@ import { useState, useMemo, useEffect, useCallback } from 'react';
 import { Viewer } from '@xeokit/xeokit-sdk/src/viewer/Viewer';
 import { NavCubePlugin } from '@xeokit/xeokit-sdk/src/plugins/NavCubePlugin/NavCubePlugin';
 
-import { pickEntity, setCameraPreset, cameraPresets, hexToRgb } from './utils';
+import { setCameraPreset, cameraPresets, hexToRgb } from './utils';
 import { useLoaders } from './loaders';
+import { deselect, usePickEntity } from './pickEntity';
 
 const faces = cameraPresets.map(({ label }) => label);
 
@@ -19,10 +20,8 @@ const useViewer = (
     flyToModels = false,
   } = {}
 ) => {
-  // A piece of state that returns the picked entity's ID
-  const [pickedEntity, setPickedEntity] = useState(null);
-
   const [viewer, setViewer] = useState(null);
+  const [pickedEntity, setPickedEntity] = usePickEntity(viewer, eventToPickOn);
 
   const modelsHaveLoaded = useLoaders(
     viewer,
@@ -82,24 +81,14 @@ const useViewer = (
     }
   };
 
-  useEffect(() => {
-    if (viewer) {
-      // Initialise xeokit features
-
-      // Pick entities
-      pickEntity(viewer, eventToPickOn, setPickedEntity);
-    }
-    return () => {
+  useEffect(
+    () => () => {
       if (viewer) {
-        // Clean up entity ID
-        setPickedEntity(null);
-
-        // Destroy the viewer
         viewer.destroy();
       }
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [viewer]);
+    },
+    [viewer]
+  );
 
   const setModelsXRayed = useCallback(
     (modelIds, xrayed, pickable = true) =>
@@ -156,6 +145,7 @@ const useViewer = (
     pickedEntity: pickedEntity
       ? { entityId: pickedEntity.id, modelId: pickedEntity.model.id }
       : { entityId: '', modelId: '' },
+    clearEntitySelection: () => setPickedEntity(deselect),
     faces,
     setObjectsVisible,
     setObjectsColorized,

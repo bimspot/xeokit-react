@@ -1,6 +1,6 @@
 {
   "name": "xeokit-react",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "description": "",
   "main": "build/xeokit-react.js",
   "scripts": {
@@ -51,6 +51,6 @@
     "/build"
   ],
   "gitpkg": {
-    "registry": "https://github.com/bimspot/bimspot-package-registry.git"
+    "registry": "git@github.com:bimspot/bimspot-package-registry.git"
   }
 }
