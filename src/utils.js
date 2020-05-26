@@ -138,3 +138,14 @@ export const hexToRgb = hex => {
   const match = hex.match(/#([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})/i);
   return match ? match.slice(1).map(hex => parseInt(hex, 16) / 255) : [0, 1, 0];
 };
+
+export const setProperties = (properties, obj) => {
+  if (properties && obj) {
+    Object.keys(properties).forEach(option => {
+      const value = properties[option];
+      if (obj[option] !== value) {
+        obj[option] = value;
+      }
+    });
+  }
+};

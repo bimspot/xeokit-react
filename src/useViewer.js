@@ -5,7 +5,12 @@ import { useState, useMemo, useEffect, useCallback } from 'react';
 import { Viewer } from '@xeokit/xeokit-sdk/src/viewer/Viewer';
 import { NavCubePlugin } from '@xeokit/xeokit-sdk/src/plugins/NavCubePlugin/NavCubePlugin';
 
-import { setCameraPreset, cameraPresets, hexToRgb } from './utils';
+import {
+  setCameraPreset,
+  cameraPresets,
+  hexToRgb,
+  setProperties,
+} from './utils';
 import { useLoaders } from './loaders';
 import { deselect, usePickEntity } from './pickEntity';
 
@@ -17,6 +22,7 @@ const useViewer = (
     eventToPickOn = 'mouseclicked',
     loaders,
     xraySettings,
+    cameraControlSettings,
     flyToModels = false,
   } = {}
 ) => {
@@ -33,15 +39,12 @@ const useViewer = (
   );
 
   useEffect(() => {
-    if (xraySettings && viewer) {
-      Object.keys(xraySettings).forEach(option => {
-        const value = xraySettings[option];
-        if (viewer.scene.xrayMaterial[option] !== value) {
-          viewer.scene.xrayMaterial[option] = value;
-        }
-      });
-    }
+    setProperties(xraySettings, viewer?.scene.xrayMaterial);
   }, [xraySettings, viewer]);
+
+  useEffect(() => {
+    setProperties(cameraControlSettings, viewer?.cameraControl);
+  }, [cameraControlSettings, viewer]);
 
   // Props to use with the viewer canvas
   const viewerCanvasProps = useMemo(

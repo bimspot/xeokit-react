@@ -2,6 +2,11 @@ import React, { Fragment, useState } from 'react';
 import useViewer from 'xeokit-react/useViewer';
 import { models } from '../models';
 
+const cameraControlSettings = {
+  navMode: 'orbit',
+  followPointer: true,
+};
+
 const mapObj = (fn, obj) =>
   Object.keys(obj).reduce((acc, key) => {
     acc[key] = fn(obj[key], key);
@@ -39,6 +44,7 @@ const HooksGuids = () => {
     clearEntitySelection,
   } = useViewer(getModelsToLoad(selected, wireframe), {
     flyToModels: true,
+    cameraControlSettings,
   });
 
   return (
