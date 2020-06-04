@@ -18,7 +18,7 @@ export const setVisibilityAndAABB = (
   if (guids?.length) {
     const visibilityMap = createMap(guids, null, true);
 
-    modelsAABB[id] = model._nodeList.reduce((aabb, node) => {
+    modelsAABB[id] = model._nodes.reduce((aabb, node) => {
       const visible = !!visibilityMap[node.id];
       node.visible = visible;
       return visible ? math.expandAABB3(aabb, node.aabb) : aabb;
