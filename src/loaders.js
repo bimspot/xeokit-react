@@ -62,8 +62,8 @@ export const useLoaders = (
       let guidChanged = false;
 
       // Update models when guids, xrayed or pickable setting changes
-      toKeep.forEach(modelId =>
-        viewer.scene.models[modelId].on('loaded', () => {
+      toKeep.forEach(modelId => {
+        const update = () => {
           const model = modelsIdMap[modelId];
           const prevModel = prevModelsIdMap[modelId];
           if (model.guids !== prevModel.guids) {
@@ -75,8 +75,12 @@ export const useLoaders = (
               viewer.scene.models[modelId][property] = model[property];
             }
           });
-        })
-      );
+        };
+
+        modelsAABB.current[modelId]
+          ? update()
+          : viewer.scene.models[modelId].once('loaded', update);
+      });
 
       // Deselect entity when it's no longer visible
       if (pickedEntity && !pickedEntity.visible) {
@@ -118,7 +122,8 @@ export const useLoaders = (
             const perfModel = loader.load(
               model.guids ? { ...model, visible: false } : model
             );
-            perfModel.on('loaded', () => {
+
+            perfModel.once('loaded', () => {
               setVisibilityAndAABB(
                 viewer.scene,
                 model,
