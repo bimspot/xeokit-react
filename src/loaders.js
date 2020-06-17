@@ -113,11 +113,8 @@ export const useLoaders = (
             }
 
             const loader =
-              viewer.plugins?.[LoaderPlugin.name] ||
-              new LoaderPlugin(viewer, {
-                id: LoaderPlugin.name,
-                dataSource,
-              });
+              viewer._plugins?.find(p => p instanceof LoaderPlugin) ||
+              new LoaderPlugin(viewer, { dataSource });
 
             const perfModel = loader.load(
               model.guids ? { ...model, visible: false } : model
