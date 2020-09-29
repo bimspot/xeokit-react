@@ -29,10 +29,11 @@ const getModelsToLoad = (selected, xrayed) => {
   return modelsToLoad;
 };
 
-const HooksGuids = () => {
+const RoomMode = () => {
   const [show, setShow] = useState(true);
   const [wireframe, setWireframe] = useState(false);
   const [selected, setSelected] = useState(mapObj(() => 'none', models));
+  const [roomMode, setRoomMode] = useState(false);
 
   const handleChange = ({ target: { id, value } }) =>
     setSelected({ ...selected, [id]: value });
@@ -42,8 +43,10 @@ const HooksGuids = () => {
     modelsHaveLoaded,
     pickedEntity,
     clearEntitySelection,
+    containsSpace,
   } = useViewer(getModelsToLoad(selected, wireframe), {
     flyToModels: true,
+    roomMode,
     cameraControlSettings,
   });
 
@@ -53,11 +56,12 @@ const HooksGuids = () => {
         {modelsHaveLoaded ? 'Loaded' : 'Not loaded'} | Picked entity:{' '}
         {pickedEntity?.entityId
           ? `${pickedEntity.entityId} from ${pickedEntity.modelId}`
-          : 'None'}
+          : 'None'}{' '}
       </div>
       <button className="d-block btn btn-link" onClick={clearEntitySelection}>
         Deselect entity
       </button>
+      <div>Contains space: {containsSpace ? 'yes' : 'no'}</div>
       <div className="form-check form-check-inline">
         <input
           className="form-check-input"
@@ -80,6 +84,18 @@ const HooksGuids = () => {
         />
         <label className="form-check-label" htmlFor="wireframe">
           Wireframe mode
+        </label>
+      </div>
+      <div className="form-check form-check-inline">
+        <input
+          className="form-check-input"
+          type="checkbox"
+          id="roommode"
+          checked={roomMode}
+          onChange={evt => setRoomMode(evt.target.checked)}
+        />
+        <label className="form-check-label" htmlFor="roommode">
+          Room mode
         </label>
       </div>
       <div className="form-group row">
@@ -112,4 +128,4 @@ const HooksGuids = () => {
   );
 };
 
-export default HooksGuids;
+export default RoomMode;

@@ -8,6 +8,36 @@ export const createMap = (array, getKey, value) =>
     return acc;
   }, Object.create(null));
 
+export const setSpaceVisibility = (
+  { scene, metaScene },
+  { id, guids },
+  visible = true,
+  spaceMap,
+  guidChanged = true
+) => {
+  const model = scene.models[id];
+
+  if ((!spaceMap[id] || guidChanged) && !guids?.length) {
+    spaceMap[id] = metaScene.getObjectIDsInSubtree(
+      metaScene.metaModels[id]?.rootMetaObject.id,
+      ['IfcSpace']
+    );
+  } else if (guids?.length && guidChanged) {
+    spaceMap[id] = guids.filter(
+      guid => metaScene.metaObjects[guid]?.type === 'IfcSpace'
+    );
+  }
+
+  spaceMap[id].forEach(modelId => {
+    const entity = model._nodes[modelId];
+    if (entity) {
+      entity.pickable = true;
+      entity.xrayed = false;
+      entity.visible = visible;
+    }
+  });
+};
+
 export const setVisibilityAndAABB = (
   scene,
   { id, guids },
