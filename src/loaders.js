@@ -166,7 +166,7 @@ export const useLoaders = (
       Promise.all(promises).then(() => setModelsHaveLoaded(true));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [viewer, models, loaders, setModelsHaveLoaded]);
+  }, [viewer, models, loaders, setModelsHaveLoaded, roomMode]);
 
   return modelsHaveLoaded;
 };

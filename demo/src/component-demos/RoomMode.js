@@ -7,6 +7,12 @@ const cameraControlSettings = {
   followPointer: true,
 };
 
+const xraySettings = {
+  preset: 'defaultWhiteBG',
+  edgeAlpha: 0.8,
+  fillAlpha: 0.15,
+};
+
 const mapObj = (fn, obj) =>
   Object.keys(obj).reduce((acc, key) => {
     acc[key] = fn(obj[key], key);
@@ -48,6 +54,7 @@ const RoomMode = () => {
     flyToModels: true,
     roomMode,
     cameraControlSettings,
+    xraySettings,
   });
 
   return (
