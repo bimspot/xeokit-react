@@ -8,6 +8,28 @@ export const createMap = (array, getKey, value) =>
     return acc;
   }, Object.create(null));
 
+const getSpaces = (metaObject, guids) => {
+  if (!metaObject) {
+    return [];
+  }
+
+  const list = [];
+
+  const guidMap = guids?.length ? createMap(guids, null, true) : {};
+
+  const visit = ({ type, id, children }) => {
+    if (type === 'IfcSpace' && (guids?.length ? guidMap[id] : true)) {
+      list.push(id);
+    }
+    if (children) {
+      children.forEach(visit);
+    }
+  };
+  visit(metaObject);
+
+  return list;
+};
+
 export const setSpaceVisibility = (
   { scene, metaScene },
   { id, guids },
@@ -17,15 +39,8 @@ export const setSpaceVisibility = (
 ) => {
   const model = scene.models[id];
 
-  if ((!spaceMap[id] || guidChanged) && !guids?.length) {
-    spaceMap[id] = metaScene.getObjectIDsInSubtree(
-      metaScene.metaModels[id]?.rootMetaObject.id,
-      ['IfcSpace']
-    );
-  } else if (guids?.length && guidChanged) {
-    spaceMap[id] = guids.filter(
-      guid => metaScene.metaObjects[guid]?.type === 'IfcSpace'
-    );
+  if (!spaceMap[id] || guidChanged) {
+    spaceMap[id] = getSpaces(metaScene.metaModels[id].rootMetaObject, guids);
   }
 
   spaceMap[id].forEach(modelId => {
