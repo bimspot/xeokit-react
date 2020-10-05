@@ -23,6 +23,7 @@ const useViewer = (
     loaders,
     xraySettings,
     cameraControlSettings,
+    selectionSettings,
     flyToModels = false,
     roomMode = false,
   } = {}
@@ -41,6 +42,9 @@ const useViewer = (
     roomMode,
     setContainsSpace
   );
+  useEffect(() => {
+    setProperties(selectionSettings, viewer?.scene.selectedMaterial);
+  }, [selectionSettings, viewer]);
 
   useEffect(() => {
     setProperties(xraySettings, viewer?.scene.xrayMaterial);

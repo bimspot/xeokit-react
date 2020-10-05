@@ -18,7 +18,7 @@ const getSpaces = (metaObject, guids) => {
   const guidMap = guids?.length ? createMap(guids, null, true) : {};
 
   const visit = ({ type, id, children }) => {
-    if (type === 'IfcSpace' && (guids?.length ? guidMap[id] : true)) {
+    if (type === 'IfcSpace' && (!guids?.length || guidMap[id])) {
       list.push(id);
     }
     if (children) {

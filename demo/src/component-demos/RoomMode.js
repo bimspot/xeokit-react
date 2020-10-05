@@ -13,6 +13,10 @@ const xraySettings = {
   fillAlpha: 0.15,
 };
 
+const selectionSettings = {
+  fillColor: [0, 0, 1],
+};
+
 const mapObj = (fn, obj) =>
   Object.keys(obj).reduce((acc, key) => {
     acc[key] = fn(obj[key], key);
@@ -55,6 +59,7 @@ const RoomMode = () => {
     roomMode,
     cameraControlSettings,
     xraySettings,
+    selectionSettings,
   });
 
   return (
