@@ -4,6 +4,7 @@ import {
   defaultLoaders,
   getExtension,
   moveCamera,
+  setSpaceVisibility,
   setVisibilityAndAABB,
 } from './utils';
 import difference from 'lodash.difference';
@@ -29,13 +30,21 @@ export const useLoaders = (
   loaders = defaultLoaders,
   pickedEntity,
   setPickedEntity,
-  flyToModels
+  flyToModels,
+  roomMode,
+  setContainsSpace
 ) => {
   // A piece of state that tells us if the models have been loaded
   const [modelsHaveLoaded, setModelsHaveLoaded] = useState(false);
   const prevModels = usePreviousModels(models, viewer, setModelsHaveLoaded);
 
   const modelsAABB = useRef(Object.create(null));
+  const spaceMap = useRef(Object.create(null));
+
+  const calculateSpace = () =>
+    setContainsSpace(
+      Object.values(spaceMap.current).some(spaces => spaces.length)
+    );
 
   useEffect(() => {
     if (viewer) {
@@ -50,6 +59,8 @@ export const useLoaders = (
       toRemove.forEach(modelId => {
         viewer.scene.models[modelId]?.destroy();
         delete modelsAABB.current[modelId];
+        delete spaceMap.current[modelId];
+        calculateSpace();
       });
 
       if (pickedEntity?.model.destroyed) {
@@ -66,15 +77,25 @@ export const useLoaders = (
         const update = () => {
           const model = modelsIdMap[modelId];
           const prevModel = prevModelsIdMap[modelId];
+
           if (model.guids !== prevModel.guids) {
             guidChanged = true;
             setVisibilityAndAABB(viewer.scene, model, modelsAABB.current);
           }
-          ['xrayed', 'pickable'].forEach(property => {
-            if (model[property] !== prevModel[property]) {
-              viewer.scene.models[modelId][property] = model[property];
-            }
-          });
+
+          viewer.scene.models[modelId].xrayed = roomMode ? true : model.xrayed;
+          viewer.scene.models[modelId].pickable = roomMode
+            ? false
+            : model.pickable;
+
+          setSpaceVisibility(
+            viewer,
+            model,
+            roomMode,
+            spaceMap.current,
+            guidChanged
+          );
+          calculateSpace();
         };
 
         modelsAABB.current[modelId]
@@ -116,11 +137,18 @@ export const useLoaders = (
               viewer._plugins?.find(p => p instanceof LoaderPlugin) ||
               new LoaderPlugin(viewer, { dataSource });
 
-            const perfModel = loader.load(
-              model.guids ? { ...model, visible: false } : model
-            );
+            const visibilitySettings = model.guids ? { visible: false } : {};
+            const modifiers = roomMode ? { xrayed: true, pickable: false } : {};
+
+            const perfModel = loader.load({
+              ...model,
+              ...visibilitySettings,
+              ...modifiers,
+            });
 
             perfModel.once('loaded', () => {
+              setSpaceVisibility(viewer, model, roomMode, spaceMap.current);
+              calculateSpace();
               setVisibilityAndAABB(
                 viewer.scene,
                 model,
@@ -138,7 +166,7 @@ export const useLoaders = (
       Promise.all(promises).then(() => setModelsHaveLoaded(true));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [viewer, models, loaders, setModelsHaveLoaded]);
+  }, [viewer, models, loaders, setModelsHaveLoaded, roomMode]);
 
   return modelsHaveLoaded;
 };

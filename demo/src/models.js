@@ -64,6 +64,12 @@ export const holterTower = {
   // },
 };
 
+const kpiTest = {
+  id: 'kpi-test',
+  src: './xkt/KPI_Test.xkt',
+  metaModelSrc: './xkt/KPI_Test.json',
+};
+
 export const models = {
   duplex: { label: 'Duplex', model: hooksModel },
   duplex2: {
@@ -72,6 +78,11 @@ export const models = {
     guids: [
       ['1CZILmCaHETO8tf3SgGEXu'],
       ['0jf0rYHfX3RAB3bSIRjmoa', '2O2Fr$t4X7Zf8NOew3FLOH'],
+      [
+        '0pNy6pOyf7JPmXRLgxs3sW',
+        '0jf0rYHfX3RAB3bSIRjmoa',
+        '2O2Fr$t4X7Zf8NOew3FLOH',
+      ],
     ],
   },
   schep: {
@@ -217,4 +228,5 @@ export const models = {
     ],
   },
   holter: { label: 'Holter Tower', model: holterTower },
+  test: { label: 'Test', model: kpiTest },
 };

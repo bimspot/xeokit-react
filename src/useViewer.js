@@ -23,11 +23,14 @@ const useViewer = (
     loaders,
     xraySettings,
     cameraControlSettings,
+    selectionSettings,
     flyToModels = false,
+    roomMode = false,
   } = {}
 ) => {
   const [viewer, setViewer] = useState(null);
   const [pickedEntity, setPickedEntity] = usePickEntity(viewer, eventToPickOn);
+  const [containsSpace, setContainsSpace] = useState(false);
 
   const modelsHaveLoaded = useLoaders(
     viewer,
@@ -35,8 +38,13 @@ const useViewer = (
     loaders,
     pickedEntity,
     setPickedEntity,
-    flyToModels
+    flyToModels,
+    roomMode,
+    setContainsSpace
   );
+  useEffect(() => {
+    setProperties(selectionSettings, viewer?.scene.selectedMaterial);
+  }, [selectionSettings, viewer]);
 
   useEffect(() => {
     setProperties(xraySettings, viewer?.scene.xrayMaterial);
@@ -88,6 +96,7 @@ const useViewer = (
     () => () => {
       if (viewer) {
         viewer.destroy();
+        setContainsSpace(false);
       }
     },
     [viewer]
@@ -157,6 +166,7 @@ const useViewer = (
     setModelsVisible,
     xrayPresets,
     modelsHaveLoaded,
+    containsSpace,
   };
 };
 

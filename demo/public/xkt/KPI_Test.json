@@ -1,0 +1,76 @@
+{
+  "id": "Project Number",
+  "projectId": "3tZh5paYDAu8HUiVD4RbAS",
+  "author": "",
+  "createdAt": "2019-10-28T10:40:04",
+  "schema": "IFC2X3",
+  "creatingApplication": "20180216_1515(x64) - Exporter 19.0.0.405 - Alternate UI 19.0.0.405",
+  "metaObjects": [
+    {
+      "id": "3tZh5paYDAu8HUiVD4RbAS",
+      "name": "Project Number",
+      "type": "IfcProject",
+      "parent": null
+    },
+    {
+      "id": "3tZh5paYDAu8HUiVD4RbAU",
+      "name": "Default",
+      "type": "IfcSite",
+      "parent": "3tZh5paYDAu8HUiVD4RbAS"
+    },
+    {
+      "id": "3tZh5paYDAu8HUiVD4RbAT",
+      "name": "",
+      "type": "IfcBuilding",
+      "parent": "3tZh5paYDAu8HUiVD4RbAU"
+    },
+    {
+      "id": "3tZh5paYDAu8HUiVExaQnR",
+      "name": "Level 0",
+      "type": "IfcBuildingStorey",
+      "parent": "3tZh5paYDAu8HUiVD4RbAT"
+    },
+    {
+      "id": "27LancYE1DDxVGcPaq1swM",
+      "name": "Basic Wall:Wall-Partn_12P-75Std-12P:305381",
+      "type": "IfcWallStandardCase",
+      "parent": "3tZh5paYDAu8HUiVExaQnR"
+    },
+    {
+      "id": "27LancYE1DDxVGcPaq1syj",
+      "name": "Basic Wall:Wall-Partn_12P-75Std-12P:305502",
+      "type": "IfcWallStandardCase",
+      "parent": "3tZh5paYDAu8HUiVExaQnR"
+    },
+    {
+      "id": "27LancYE1DDxVGcPaq1s_g",
+      "name": "Basic Wall:Wall-Partn_12P-75Std-12P:305625",
+      "type": "IfcWallStandardCase",
+      "parent": "3tZh5paYDAu8HUiVExaQnR"
+    },
+    {
+      "id": "27LancYE1DDxVGcPaq1smt",
+      "name": "Basic Wall:Wall-Partn_12P-75Std-12P:305732",
+      "type": "IfcWallStandardCase",
+      "parent": "3tZh5paYDAu8HUiVExaQnR"
+    },
+    {
+      "id": "27LancYE1DDxVGcPaq1smd",
+      "name": "Floor:Floor-Upper_160mmConc-CorusComFlor51:305748",
+      "type": "IfcSlab",
+      "parent": "3tZh5paYDAu8HUiVExaQnR"
+    },
+    {
+      "id": "27LancYE1DDxVGcPaq1smD",
+      "name": "Doors_ExtDbl_Flush:1810x2110mm:305790",
+      "type": "IfcDoor",
+      "parent": "3tZh5paYDAu8HUiVExaQnR"
+    },
+    {
+      "id": "27LancYE1DDxVGcPaq1so7",
+      "name": "1",
+      "type": "IfcSpace",
+      "parent": "3tZh5paYDAu8HUiVExaQnR"
+    }
+  ]
+}
