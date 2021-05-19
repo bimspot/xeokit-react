@@ -44,6 +44,7 @@ const RoomMode = () => {
   const [wireframe, setWireframe] = useState(false);
   const [selected, setSelected] = useState(mapObj(() => 'none', models));
   const [roomMode, setRoomMode] = useState(false);
+  const [fastNav, setFastNav] = useState(false);
 
   const handleChange = ({ target: { id, value } }) =>
     setSelected({ ...selected, [id]: value });
@@ -60,6 +61,7 @@ const RoomMode = () => {
     cameraControlSettings,
     xraySettings,
     selectionSettings,
+    fastNav,
   });
 
   return (
@@ -108,6 +110,18 @@ const RoomMode = () => {
         />
         <label className="form-check-label" htmlFor="roommode">
           Room mode
+        </label>
+      </div>
+      <div className="form-check form-check-inline">
+        <input
+          className="form-check-input"
+          type="checkbox"
+          id="fastNav"
+          checked={fastNav}
+          onChange={evt => setFastNav(evt.target.checked)}
+        />
+        <label className="form-check-label" htmlFor="fastNav">
+          Fast Nav
         </label>
       </div>
       <div className="form-group row">

@@ -27,6 +27,7 @@ const useViewer = (
     selectionSettings,
     flyToModels = false,
     roomMode = false,
+    fastNav = true,
   } = {}
 ) => {
   const [viewer, setViewer] = useState(null);
@@ -45,10 +46,12 @@ const useViewer = (
   );
 
   useEffect(() => {
-    if (viewer) {
+    if (viewer && fastNav) {
       new FastNavPlugin(viewer, {});
+    } else {
+      viewer?._plugins?.find(p => p instanceof FastNavPlugin)?.destroy();
     }
-  }, [viewer]);
+  }, [viewer, fastNav]);
 
   useEffect(() => {
     setProperties(selectionSettings, viewer?.scene.selectedMaterial);
