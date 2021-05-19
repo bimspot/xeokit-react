@@ -53,21 +53,6 @@ export const holterTower = {
   src: './xkt/HolterTower.xkt',
   metaModelSrc: './xkt/HolterTower.json',
   edges: true,
-  // objectDefaults: {
-  //   IfcSpace: {
-  //     pickable: false,
-  //     opacity: 0.2,
-  //   },
-  //   DEFAULT: {
-  //     colorize: [1, 1, 1],
-  //   },
-  // },
-};
-
-const kpiTest = {
-  id: 'kpi-test',
-  src: './xkt/KPI_Test.xkt',
-  metaModelSrc: './xkt/KPI_Test.json',
 };
 
 export const models = {
@@ -228,5 +213,4 @@ export const models = {
     ],
   },
   holter: { label: 'Holter Tower', model: holterTower },
-  test: { label: 'Test', model: kpiTest },
 };

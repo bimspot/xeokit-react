@@ -4,6 +4,7 @@ import { useState, useMemo, useEffect, useCallback } from 'react';
 // Xeokit related imports
 import { Viewer } from '@xeokit/xeokit-sdk/src/viewer/Viewer';
 import { NavCubePlugin } from '@xeokit/xeokit-sdk/src/plugins/NavCubePlugin/NavCubePlugin';
+import { FastNavPlugin } from '@xeokit/xeokit-sdk/src/plugins/FastNavPlugin/FastNavPlugin';
 
 import {
   setCameraPreset,
@@ -42,6 +43,13 @@ const useViewer = (
     roomMode,
     setContainsSpace
   );
+
+  useEffect(() => {
+    if (viewer) {
+      new FastNavPlugin(viewer, {});
+    }
+  }, [viewer]);
+
   useEffect(() => {
     setProperties(selectionSettings, viewer?.scene.selectedMaterial);
   }, [selectionSettings, viewer]);
@@ -69,7 +77,7 @@ const useViewer = (
       ref: canvasElement =>
         canvasElement && viewer
           ? new NavCubePlugin(viewer, { canvasElement })
-          : viewer?.plugins?.NavCubePlugin.destroy(),
+          : viewer?._plugins?.find(p => p instanceof NavCubePlugin)?.destroy(),
     }),
     [viewer]
   );

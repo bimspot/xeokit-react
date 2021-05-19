@@ -15,7 +15,7 @@ const toggleVisibility = state => (state === VISIBLE ? HIDDEN : VISIBLE);
 const defaultPlane = {
   id: 'mySectionPlane',
   pos: [0, 0, 0],
-  dir: [0, 0, 1],
+  dir: [1, 0, 0],
 };
 
 export const useSectionPlanes = (viewer, plane = defaultPlane) => {
@@ -23,11 +23,7 @@ export const useSectionPlanes = (viewer, plane = defaultPlane) => {
 
   useEffect(
     () => () => {
-      if (
-        viewer &&
-        viewer.scene.sectionPlanes &&
-        viewer.scene.sectionPlanes[plane.id]
-      ) {
+      if (viewer?.scene.sectionPlanes?.[plane.id]) {
         viewer.scene.sectionPlanes[plane.id].destroy();
       }
     },
@@ -44,7 +40,8 @@ export const useSectionPlanes = (viewer, plane = defaultPlane) => {
         }
       } else {
         const sectionPlanesPlugin =
-          viewer.plugins.SectionPlanes || new SectionPlanesPlugin(viewer);
+          viewer._plugins.find(p => p instanceof SectionPlanesPlugin) ||
+          new SectionPlanesPlugin(viewer);
 
         if (!sectionPlane) {
           sectionPlanesPlugin.createSectionPlane(plane);
