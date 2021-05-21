@@ -147,14 +147,14 @@ export const useLoaders = (
             });
 
             perfModel.once('loaded', () => {
-              setSpaceVisibility(viewer, model, roomMode, spaceMap.current);
-              calculateSpace();
               setVisibilityAndAABB(
                 viewer.scene,
                 model,
                 modelsAABB.current,
                 false
               );
+              setSpaceVisibility(viewer, model, roomMode, spaceMap.current);
+              calculateSpace();
               moveCamera(viewer, modelsAABB.current, flyToModels);
               resolve();
             });
