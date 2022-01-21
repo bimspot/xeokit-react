@@ -43,7 +43,7 @@ export const useLoaders = (
 
   const calculateSpace = () =>
     setContainsSpace(
-      Object.values(spaceMap.current).some(spaces => spaces.length)
+      Object.values(spaceMap.current).some(map => Object.keys(map).length)
     );
 
   useEffect(() => {

@@ -13,13 +13,12 @@ const getSpaces = (metaObject, guids) => {
     return [];
   }
 
-  const list = [];
-
-  const guidMap = guids?.length ? createMap(guids, null, true) : {};
+  const spaceMap = Object.create(null);
+  const guidMap = createMap(guids?.length ? guids : [], null, true);
 
   const visit = ({ type, id, children }) => {
     if (type === 'IfcSpace' && (!guids?.length || guidMap[id])) {
-      list.push(id);
+      spaceMap[id] = true;
     }
     if (children) {
       children.forEach(visit);
@@ -27,7 +26,7 @@ const getSpaces = (metaObject, guids) => {
   };
   visit(metaObject);
 
-  return list;
+  return spaceMap;
 };
 
 export const setSpaceVisibility = (
@@ -43,14 +42,13 @@ export const setSpaceVisibility = (
     spaceMap[id] = getSpaces(metaScene.metaModels[id].rootMetaObject, guids);
   }
 
-  spaceMap[id].forEach(modelId => {
-    const entity = model._nodes[modelId];
-    if (entity) {
-      entity.pickable = true;
-      entity.xrayed = false;
-      entity.visible = visible;
-    }
-  });
+  model.entityList
+    .filter(e => spaceMap[id][e.id])
+    .forEach(e => {
+      e.pickable = true;
+      e.xrayed = false;
+      e.visible = visible;
+    });
 };
 
 export const setVisibilityAndAABB = (
