@@ -1,5 +1,5 @@
 {
-  "name": "xeokit-react",
+  "name": "@bimspot/xeokit-react",
   "version": "1.0.2",
   "description": "",
   "main": "build/xeokit-react.js",
@@ -10,8 +10,11 @@
     "lint-fix": "./node_modules/.bin/eslint *.js --fix",
     "dev": "./node_modules/.bin/webpack --watch --mode=production",
     "build": "./node_modules/.bin/webpack --mode=production",
-    "gitpkg-publish": "gitpkg publish",
-    "publish-package": "run-s lint build gitpkg-publish"
+    "publish-package": "npm publish",
+    "publish-next": "npm publish --tag=next",
+    "clean": "npx rimraf build",
+    "build-and-publish-package": "run-s lint clean build publish-package",
+    "build-and-publish-next": "run-s lint clean build publish-next"
   },
   "keywords": [
     "xeokit",
@@ -50,7 +53,8 @@
   "files": [
     "/build"
   ],
-  "gitpkg": {
-    "registry": "git@github.com:bimspot/bimspot-package-registry.git"
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/bimspot/xeokit-react.git"
   }
 }
